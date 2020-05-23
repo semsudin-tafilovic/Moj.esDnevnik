@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Moj esDnevnik</string>
+    <string name="select_student">Izaberi učenika</string>
+    <string name="unknown_error">Nepoznata greška</string>
+    <string name="username_label">Korisničko ime</string>
+    <string name="password_label">Šifra</string>
+    <string name="login">Prijavi se</string>
+    <string name="enter_password_here">Upišite vašu sifru ovde</string>
+    <string name="example_google_com">example@google.com</string>
+    <string name="remember_me">Zapamti me</string>
+    <string name="no_internet_connection">Uređaj nema vezu sa internetom.</string>
+    <string name="logout">Odjavi se</string>
+</resources>

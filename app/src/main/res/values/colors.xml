@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#b71c1c</color>
+    <color name="colorPrimaryDark">#7f0000</color>
+    <color name="colorAccent">#e53935</color>
+    <color name="student_icon_color">#454545</color>
+    <color name="transparent_black2">#A93C3C3C</color>
+    <color name="white_70">#B3FFFFFF</color>
+
+    <color name="green">#2A8C2A</color>
+    <color name="orange">#FF9100</color>
+    <color name="red">#f00</color>
+</resources>

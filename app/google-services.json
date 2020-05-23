@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "145402924891",
+    "firebase_url": "https://moj-esdnevnik.firebaseio.com",
+    "project_id": "moj-esdnevnik",
+    "storage_bucket": "moj-esdnevnik.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145402924891:android:b69bfbee1861323cfad47e",
+        "android_client_info": {
+          "package_name": "rs.tafilovic.mojesdnevnik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145402924891-2pvnjohqh94elus4426mb3vbuiqqfdfu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "rs.tafilovic.mojesdnevnik",
+            "certificate_hash": "626c194dab163c14899072f4c45e90e9578b1de9"
+          }
+        },
+        {
+          "client_id": "145402924891-ifmqogjqqqshomasff1puuv00ftijqph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ0RlUnCbOm0Q3pZfSjfKpy-oz3FfXwyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145402924891-ifmqogjqqqshomasff1puuv00ftijqph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
