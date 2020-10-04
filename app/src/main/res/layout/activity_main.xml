@@ -59,7 +59,7 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#EAE9E9"
@@ -69,19 +69,24 @@
             android:paddingBottom="5dp"
             tools:ignore="RtlSymmetry">
 
-            <TextView
-                android:id="@+id/tvSchoolName"
-                android:layout_width="0dp"
+            <Spinner
+                android:id="@+id/spSchoolName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="#000" />
+                android:minWidth="100dp"
+                android:theme="@style/ThemeOverlay.MaterialComponents.Light"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
                 android:id="@+id/spSchoolYears"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:theme="@style/ThemeOverlay.MaterialComponents.Light" />
-        </LinearLayout>
+                android:minWidth="100dp"
+                android:theme="@style/ThemeOverlay.MaterialComponents.Light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/tvNoInternetConnection"

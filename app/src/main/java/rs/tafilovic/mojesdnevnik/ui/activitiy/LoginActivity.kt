@@ -6,6 +6,8 @@ import android.os.Handler
 import android.view.View
 import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
 import rs.tafilovic.mojesdnevnik.MyApp
 import rs.tafilovic.mojesdnevnik.R
@@ -14,6 +16,7 @@ import rs.tafilovic.mojesdnevnik.util.KeyboardEventListener
 import rs.tafilovic.mojesdnevnik.util.Logger
 import rs.tafilovic.mojesdnevnik.util.PrefsHelper
 import rs.tafilovic.mojesdnevnik.viewmodel.LoginViewModel
+import java.lang.RuntimeException
 import javax.inject.Inject
 
 class LoginActivity : BaseActivity() {
@@ -25,6 +28,9 @@ class LoginActivity : BaseActivity() {
 
     @Inject
     lateinit var prefsHelper: PrefsHelper
+
+    private var username: String? = null
+    private var password: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as MyApp).appComponent().inject(this)
@@ -44,10 +50,10 @@ class LoginActivity : BaseActivity() {
         })
 
         loginViewModel.stateLiveData.observe(this, Observer {
-            if(it.statusValue==StatusCode.LOADING){
+            if (it.statusValue == StatusCode.LOADING) {
                 loginProgress.visibility = View.VISIBLE
                 cardLogin.visibility = View.GONE
-            }else{
+            } else {
                 loginProgress.visibility = View.GONE
                 cardLogin.visibility = View.VISIBLE
             }
@@ -67,8 +73,8 @@ class LoginActivity : BaseActivity() {
 
     private fun login() {
         prefsHelper.removeCredentials()
-        val username = etUsername.editableText?.toString()
-        val password = etPassword.editableText?.toString()
+        username = etUsername.editableText?.toString()
+        password = etPassword.editableText?.toString()
         Logger.d(TAG, "btnLoginClick: username: $username password: $password")
         val rememberMe = cbSaveMe.isChecked
         loginViewModel.login(username, password, rememberMe)

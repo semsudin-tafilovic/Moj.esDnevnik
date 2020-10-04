@@ -13,10 +13,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
 import rs.tafilovic.mojesdnevnik.MyApp
 import rs.tafilovic.mojesdnevnik.R
-import rs.tafilovic.mojesdnevnik.model.SchoolYear
-import rs.tafilovic.mojesdnevnik.model.StatusCode
-import rs.tafilovic.mojesdnevnik.model.Student
-import rs.tafilovic.mojesdnevnik.model.StudentSchoolYear
+import rs.tafilovic.mojesdnevnik.model.*
 import rs.tafilovic.mojesdnevnik.presentation.adapter.MainPageAdapter
 import rs.tafilovic.mojesdnevnik.ui.fragment.StudentsFragment
 import rs.tafilovic.mojesdnevnik.util.Logger
@@ -39,10 +36,6 @@ class MainActivity : BaseActivity() {
 
     private lateinit var students: List<Student>
 
-    // Spinners onItemSelectedListener executes on initialization.
-    // Increment this counter and use only callbacks when this counter is greater then 0
-    private var spinnerCurrentSelection = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         (applicationContext as MyApp).appComponent().inject(this)
@@ -51,30 +44,46 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        spSchoolYears.onItemSelectedListener = onItemSelectedListener
+        spSchoolYears.onItemSelectedListener = onSchoolYearSelected
+        spSchoolName.onItemSelectedListener = onSchoolSelected
 
         viewModel.studentsMutableLiveDate.observe(this, Observer {
+            if (it == null) return@Observer
             Logger.d(TAG, "studentsMutableLiveDate.observer: $it")
             students = it
             viewModel.setSelectedStudent(it.first())
         })
 
         viewModel.selectedStudentLiveData.observe(this, Observer {
-            tvSchoolName.text = it?.getSchool()?.schoolName
-            supportActionBar?.setTitle(it.fullName)
-            val schoolYears = it?.getSchool()?.schoolyears
-                ?.map { map -> map.value }
-                ?.sortedByDescending { i -> i.yearId }
+            if (it == null) return@Observer
 
-            setupSchoolYearsSpinner(schoolYears)
+            supportActionBar?.title = it.fullName
+
+            val schools = it.schools.entries
+                .sortedByDescending { Integer.getInteger(it.key) }
+                .map { it.value }
+
+            setupSchoolsSpinner(schools)
+        })
+
+        viewModel.selectedSchoolLiveData.observe(this, Observer { school ->
+            if (school == null) return@Observer
+            val studentSchoolYears =
+                school.schoolyears.entries
+                    .sortedByDescending { it.key.toInt() }
+                    .map { it.value }
+
+            setupSchoolYearsSpinner(studentSchoolYears)
         })
 
         viewModel.studentSchoolYear.observe(this, Observer {
+            if (it == null) return@Observer
             Logger.d(TAG, "studentSchoolYear.observer: $it")
             setPagerAdapter(it)
         })
 
         viewModel.stateMutableLiveData.observe(this, Observer {
+            if (it == null) return@Observer
             Logger.d(TAG, "onStateMutableLiveData() - status = ${it.statusValue}")
             if (it.statusValue == StatusCode.LOADING) {
                 progressLoader.visibility = View.VISIBLE
@@ -86,6 +95,7 @@ class MainActivity : BaseActivity() {
                 }
             }
         })
+
     }
 
     private fun setPagerAdapter(studentSchoolYear: StudentSchoolYear) {
@@ -152,7 +162,29 @@ class MainActivity : BaseActivity() {
         spSchoolYears.adapter = spinnerAdapter
     }
 
-    private val onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+    private fun setupSchoolsSpinner(schools: List<School>?) {
+        if (schools.isNullOrEmpty()) return
+        Logger.d(TAG, "setupSchoolsSpinner()")
+
+        val items =
+            schools.map { String.format("%s", it.schoolName) }
+        val spinnerAdapter =
+            ArrayAdapter(this, R.layout.row_school_year, items)
+        spSchoolName.adapter = spinnerAdapter
+    }
+
+    private val onSchoolSelected = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            Logger.d(TAG, "onSchoolPositionSelected: $position")
+            viewModel.setSelectedSchool(position)
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
+            Logger.d(TAG, "onNothingSelected")
+        }
+    }
+
+    private val onSchoolYearSelected = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(parent: AdapterView<*>?) {
             Logger.d(TAG, "onNothingSelected:")
             // do nothing
@@ -164,10 +196,8 @@ class MainActivity : BaseActivity() {
             position: Int,
             id: Long
         ) {
-            Logger.d(TAG, "onItemSelected: $position")
-            if (spinnerCurrentSelection != position)
-                viewModel.setSelectedSchoolYear(position)
-            spinnerCurrentSelection = position
+            Logger.d(TAG, "onSchoolYearItemSelected: $position")
+            viewModel.setSelectedSchoolYear(position)
         }
     }
 

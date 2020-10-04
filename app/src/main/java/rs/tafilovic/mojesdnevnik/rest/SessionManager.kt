@@ -1,7 +1,6 @@
 package rs.tafilovic.mojesdnevnik.rest
 
-import android.os.Handler
-import android.os.Looper
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import org.jsoup.Jsoup
 import rs.tafilovic.mojesdnevnik.model.Cookie
 import rs.tafilovic.mojesdnevnik.model.Session
@@ -12,9 +11,19 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.net.*
 
+/**
+ * Test accounts:
+ *
+ * username=tafilovicmevljuda334@gmail.com
+ * password=Jerebicanin323
+ *
+ * username=ebuhamza020@gmail.com
+ * password=Hamzahamza1
+ */
 class SessionManager(private val prefsHelper: PrefsHelper) {
 
     private val TAG: String = this.javaClass.name
+
 
     private val GET = "GET"
     private val POST = "POST"
@@ -127,6 +136,8 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
         prefsHelper.setString(Cookie.COOKIE, session.getCookiesFormatted())
         prefsHelper.setLong(Cookie.COOKIE_EXPIRE, session.cookies[0].expirationTime)
 
+        FirebaseCrashlytics.getInstance().setUserId(username)
+
         return session.getCookiesFormatted()
     }
 
@@ -154,6 +165,7 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
             prefsHelper.setString(Cookie.PASSWORD, password)
         }
 
+        FirebaseCrashlytics.getInstance().setUserId(username)
         return session.getCookiesFormatted()
     }
 
