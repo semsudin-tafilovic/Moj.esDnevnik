@@ -5,9 +5,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import rs.tafilovic.mojesdnevnik.model.Student
 import rs.tafilovic.mojesdnevnik.model.StudentSchoolYear
+import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.ui.fragment.*
 
-class MainPageAdapter(fragmentActivity: FragmentActivity, val studentSchoolYear: StudentSchoolYear) :
+class MainPageAdapter(fragmentActivity: FragmentActivity, val timelineParams: TimelineParams) :
     FragmentStateAdapter(fragmentActivity) {
 
     val items = arrayOf(
@@ -26,12 +27,13 @@ class MainPageAdapter(fragmentActivity: FragmentActivity, val studentSchoolYear:
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            1 -> BaseListFragment.getInstance<GradesFragment>(position, studentSchoolYear)
-            2 -> BaseListFragment.getInstance<ActivitiesFragment>(position, studentSchoolYear)
-            3 -> BaseListFragment.getInstance<AbsentsFragment>(position, studentSchoolYear)
-            4 -> BaseListFragment.getInstance<BehaviorsFragment>(position, studentSchoolYear)
-            5 -> BaseListFragment.getInstance<CoursesFragment>(position, studentSchoolYear)
-            else -> BaseListFragment.getInstance<TimelineFragment>(position, studentSchoolYear)
+            1 -> BaseListFragment.getInstance<GradesFragment>(position, timelineParams)
+            2 -> BaseListFragment.getInstance<ActivitiesFragment>(position, timelineParams)
+            3 -> BaseListFragment.getInstance<AbsentsFragment>(position, timelineParams)
+            4 -> BaseListFragment.getInstance<BehaviorsFragment>(position, timelineParams)
+            5 -> BaseListFragment.getInstance<CoursesFragment>(position, timelineParams)
+            else -> BaseListFragment.getInstance<TimelineFragment>(position, timelineParams)
         }
     }
+
 }

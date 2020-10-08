@@ -16,7 +16,9 @@ data class SchoolYearPart(
 data class Course(var name: String, var parts: List<SchoolYearPart>)
 
 @Parcelize
-data class SchoolClass(val section: String, val studentClassId: String) : Parcelable
+data class SchoolClass(val section: String, val studentClassId: String) : Parcelable {
+    var id: String? = null
+}
 
 @Parcelize
 data class SchoolYear(
@@ -26,7 +28,10 @@ data class SchoolYear(
 ) : Parcelable
 
 @Parcelize
-data class School(val schoolName: String, val schoolyears: HashMap<String, SchoolYear>) : Parcelable
+data class School(val schoolName: String, val schoolyears: HashMap<String, SchoolYear>) :
+    Parcelable {
+    var id: String? = null
+}
 
 @Parcelize
 data class Student(
@@ -37,6 +42,7 @@ data class Student(
     val schools: HashMap<String, School>
 ) : Parcelable {
 
+/*
     fun getSchoolId(): String {
         return schools.keys.first()
     }
@@ -49,7 +55,9 @@ data class Student(
         val schoolYears = getSchool().schoolyears.values
         return schoolYears.maxBy { it.yearId }!!
     }
+*/
 
+/*
     fun getClassId(): String? {
         val schoolClasses = getSchoolYear().classes
         return schoolClasses.keys.first()
@@ -58,6 +66,7 @@ data class Student(
     fun getStudentClassId(): Long {
         return getSchoolYear().classes.values.first().studentClassId.toLong()
     }
+*/
 
     companion object {
         val DIF_UTIL = object : DiffUtil.ItemCallback<Student>() {
@@ -72,6 +81,15 @@ data class Student(
         }
     }
 }
+
+@Parcelize
+data class TimelineParams(
+    var studentId: String? = null,
+    var schoolId: String? = null,
+    var classId: String? = null,
+    var studentClassId: String? = null
+) :
+    Parcelable
 
 @Parcelize
 data class StudentSchoolYear(val student: Student?, val schoolYear: SchoolYear?) : Parcelable

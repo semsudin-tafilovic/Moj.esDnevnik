@@ -3,7 +3,7 @@ package rs.tafilovic.mojesdnevnik.ui.fragment
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_list.*
 import rs.tafilovic.mojesdnevnik.MyApp
-import rs.tafilovic.mojesdnevnik.model.StudentSchoolYear
+import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.presentation.adapter.AbsentsAdapter
 import rs.tafilovic.mojesdnevnik.viewmodel.AbsentsViewModel
 import javax.inject.Inject
@@ -20,7 +20,7 @@ class AbsentsFragment : BaseListFragment() {
         (requireContext().applicationContext as MyApp).appComponent().inject(this)
     }
 
-    override fun init(page: Int, studentSchoolYear: StudentSchoolYear) {
+    override fun init(page: Int, timelineParams: TimelineParams) {
         recycler.adapter = adapter
 
         viewModel.liveData.observe(viewLifecycleOwner, Observer {
@@ -31,7 +31,6 @@ class AbsentsFragment : BaseListFragment() {
             showMessage(it.message)
         })
 
-        if (studentSchoolYear.schoolYear != null)
-            viewModel.get(studentSchoolYear.schoolYear)
+        viewModel.get(timelineParams)
     }
 }

@@ -50,6 +50,16 @@ class Repository(
             override fun onResponse(call: Call<Students>, response: Response<Students>) {
                 if (response.isSuccessful) {
                     students = response.body()?.data
+                    students?.forEach { student ->
+                        student.schools.forEach { entrySchool: Map.Entry<String, School> ->
+                            entrySchool.value.id = entrySchool.key
+                            entrySchool.value.schoolyears.forEach { entrySchoolYear: Map.Entry<String, SchoolYear> ->
+                                entrySchoolYear.value.classes.forEach { entrySchoolClass: Map.Entry<String, SchoolClass> ->
+                                    entrySchoolClass.value.id = entrySchoolClass.key
+                                }
+                            }
+                        }
+                    }
                     onResult(Status(StatusCode.FINISHED, students, null))
                 } else {
                     onResult(Status(StatusCode.ERROR, response.message()))
@@ -75,106 +85,119 @@ class Repository(
             classId
         ).enqueue(object : Callback<Timeline> {
             override fun onFailure(call: Call<Timeline>, t: Throwable) {
+                Logger.d(TAG, "onFailure() - error: " + t.message)
                 notifyError(t, onResult)
             }
 
             override fun onResponse(call: Call<Timeline>, response: Response<Timeline>) {
+                Logger.d(TAG, "onResponse() - response: " + response.body())
                 notifyResult(response, onResult)
             }
         })
     }
 
-    fun getActivities(schoolYear: SchoolYear, onResult: (Status<List<SubjectActivity>>) -> Unit) {
-        apiClient.getApiService().getActivities(schoolYear.classes.values.first().studentClassId)
-            .enqueue(object : Callback<List<SubjectActivity>> {
-                override fun onFailure(call: Call<List<SubjectActivity>>, t: Throwable) {
-                    notifyError(t, onResult)
-                }
-
-                override fun onResponse(
-                    call: Call<List<SubjectActivity>>,
-                    response: Response<List<SubjectActivity>>
-                ) {
-                    notifyResult(response, onResult)
-                }
-            })
-    }
-
-    fun getGrades(schoolYear: SchoolYear, onResult: (Status<List<FullGrades>>) -> Unit) {
-        apiClient.getApiService().getGrades(schoolYear.classes.values.first().studentClassId)
-            .enqueue(object : Callback<List<FullGrades>> {
-                override fun onFailure(call: Call<List<FullGrades>>, t: Throwable) {
-                    notifyError(t, onResult)
-                }
-
-                override fun onResponse(
-                    call: Call<List<FullGrades>>,
-                    response: Response<List<FullGrades>>
-                ) {
-                    notifyResult(response, onResult)
-                }
-            })
-    }
-
-    fun getAbsents(schoolYear: SchoolYear, onResult: (Status<List<Absent>?>) -> Unit) {
-        apiClient.getApiService().getAbsents(schoolYear.classes.values.first().studentClassId)
-            .enqueue(object : Callback<HashMap<String, AbsentClass>> {
-                override fun onFailure(call: Call<HashMap<String, AbsentClass>>, t: Throwable) {
-                    notifyError(t, onResult)
-                }
-
-                override fun onResponse(
-                    call: Call<HashMap<String, AbsentClass>>,
-                    response: Response<HashMap<String, AbsentClass>>
-                ) {
-                    if (response.isSuccessful) {
-                        val data = response.body()?.values?.toList()
-                        val absents = arrayListOf<Absent>()
-
-                        if (data != null)
-                            for (i in data)
-                                absents.addAll(i.map())
-
-                        onResult(Status(StatusCode.FINISHED, absents, null))
-                    } else {
-                        onResult(Status(StatusCode.ERROR, null, response.message()))
+    fun getActivities(studentClassId: String?, onResult: (Status<List<SubjectActivity>>) -> Unit) {
+        studentClassId?.let {
+            apiClient.getApiService().getActivities(studentClassId)
+                .enqueue(object : Callback<List<SubjectActivity>> {
+                    override fun onFailure(call: Call<List<SubjectActivity>>, t: Throwable) {
+                        notifyError(t, onResult)
                     }
-                }
-            })
+
+                    override fun onResponse(
+                        call: Call<List<SubjectActivity>>,
+                        response: Response<List<SubjectActivity>>
+                    ) {
+                        notifyResult(response, onResult)
+                    }
+                })
+        }
     }
 
-    fun getBehaviors(schoolYear: SchoolYear, onResult: (Status<List<Behavior>>) -> Unit) {
-        apiClient.getApiService().getBehaviors(schoolYear.classes.values.first().studentClassId)
-            .enqueue(object : Callback<List<Behavior>> {
+    fun getGrades(studentClassId: String?, onResult: (Status<List<FullGrades>>) -> Unit) {
+        studentClassId?.let {
+            apiClient.getApiService().getGrades(studentClassId)
+                .enqueue(object : Callback<List<FullGrades>> {
+                    override fun onFailure(call: Call<List<FullGrades>>, t: Throwable) {
+                        notifyError(t, onResult)
+                    }
 
-                override fun onFailure(call: Call<List<Behavior>>, t: Throwable) {
-                    notifyError(t, onResult)
-                }
-
-                override fun onResponse(
-                    call: Call<List<Behavior>>,
-                    response: Response<List<Behavior>>
-                ) {
-                    notifyResult(response, onResult)
-                }
-            })
+                    override fun onResponse(
+                        call: Call<List<FullGrades>>,
+                        response: Response<List<FullGrades>>
+                    ) {
+                        notifyResult(response, onResult)
+                    }
+                })
+        }
     }
 
-    fun getCourses(schoolYear: SchoolYear, onResult: (Status<List<MainCourse>>) -> Unit) {
-        apiClient.getApiService().getCourses(schoolYear.classes.values.first().studentClassId)
-            .enqueue(object : Callback<List<MainCourse>> {
+    fun getAbsents(studentClassId: String?, onResult: (Status<List<Absent>?>) -> Unit) {
+        studentClassId?.let {
+            apiClient.getApiService().getAbsents(studentClassId)
+                .enqueue(object : Callback<HashMap<String, AbsentClass>> {
+                    override fun onFailure(call: Call<HashMap<String, AbsentClass>>, t: Throwable) {
+                        notifyError(t, onResult)
+                    }
 
-                override fun onFailure(call: Call<List<MainCourse>>, t: Throwable) {
-                    notifyError(t, onResult)
-                }
+                    override fun onResponse(
+                        call: Call<HashMap<String, AbsentClass>>,
+                        response: Response<HashMap<String, AbsentClass>>
+                    ) {
+                        if (response.isSuccessful) {
+                            val data = response.body()?.values?.toList()
+                            val absents = arrayListOf<Absent>()
 
-                override fun onResponse(
-                    call: Call<List<MainCourse>>,
-                    response: Response<List<MainCourse>>
-                ) {
-                    notifyResult(response, onResult)
-                }
-            })
+                            if (data != null)
+                                for (i in data)
+                                    absents.addAll(i.map())
+
+                            onResult(Status(StatusCode.FINISHED, absents, null))
+                        } else {
+                            onResult(Status(StatusCode.ERROR, null, response.message()))
+                        }
+                    }
+                })
+        }
+    }
+
+    fun getBehaviors(studentClassId: String?, onResult: (Status<List<Behavior>>) -> Unit) {
+        studentClassId?.let {
+            apiClient.getApiService().getBehaviors(studentClassId)
+                .enqueue(object : Callback<List<Behavior>> {
+
+                    override fun onFailure(call: Call<List<Behavior>>, t: Throwable) {
+                        notifyError(t, onResult)
+                    }
+
+                    override fun onResponse(
+                        call: Call<List<Behavior>>,
+                        response: Response<List<Behavior>>
+                    ) {
+                        notifyResult(response, onResult)
+                    }
+                })
+        }
+    }
+
+    fun getCourses(studentClassId: String?, onResult: (Status<List<MainCourse>>) -> Unit) {
+        studentClassId?.let {
+            apiClient.getApiService().getCourses(studentClassId)
+                .enqueue(object : Callback<List<MainCourse>> {
+
+                    override fun onFailure(call: Call<List<MainCourse>>, t: Throwable) {
+                        notifyError(t, onResult)
+                    }
+
+                    override fun onResponse(
+                        call: Call<List<MainCourse>>,
+                        response: Response<List<MainCourse>>
+                    ) {
+                        notifyResult(response, onResult)
+                    }
+                })
+        }
+
     }
 
     private fun <T> notifyError(t: Throwable, onError: (Status<T>) -> Unit) {

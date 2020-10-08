@@ -2,7 +2,10 @@ package rs.tafilovic.mojesdnevnik.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import rs.tafilovic.mojesdnevnik.model.*
+import rs.tafilovic.mojesdnevnik.model.School
+import rs.tafilovic.mojesdnevnik.model.SchoolYear
+import rs.tafilovic.mojesdnevnik.model.Status
+import rs.tafilovic.mojesdnevnik.model.Student
 import rs.tafilovic.mojesdnevnik.repository.Repository
 import javax.inject.Inject
 
@@ -16,44 +19,58 @@ class MainViewModel @Inject constructor(val repository: Repository) : ViewModel(
 
     val selectedStudentLiveData = MutableLiveData<Student>()
 
-    private val selectedSchoolYearLiveData = MutableLiveData<SchoolYear>()
-
-    var studentSchoolYear: MutableLiveData<StudentSchoolYear> = MutableLiveData()
-
     val selectedSchoolLiveData: MutableLiveData<School> = MutableLiveData()
 
+    var selectedSchoolYear: MutableLiveData<SchoolYear> = MutableLiveData()
+
+    val schoolsLiveData = MutableLiveData<List<School>>()
+
+    val schoolYearsLiveData = MutableLiveData<List<SchoolYear>>()
+
+    val timelineParamsLiveData: TimelineParamsLiveData
+
     init {
-        studentsMutableLiveDate.postValue(repository.students)
-    }
-
-    fun setSelectedStudent(student: Student) {
-        selectedStudentLiveData.postValue(student)
-    }
-
-    fun setSelectedSchool(position: Int) {
-        val schools = selectedStudentLiveData.value?.schools?.entries
-            ?.sortedByDescending { it.key.toInt() }
-            ?.map { it.value }
-
-        selectedSchoolLiveData.postValue(
-            if (schools != null && schools.isNotEmpty()) schools[position] else null
+        timelineParamsLiveData = TimelineParamsLiveData(
+            selectedStudentLiveData,
+            selectedSchoolLiveData,
+            selectedSchoolYear
         )
     }
 
+    fun setSelectedStudent(student: Student) {
+        selectedStudentLiveData.postValue(student).apply {
+            val schools = student.schools
+                .map { it.value }
+                .sortedByDescending { it.id?.toInt() }
+            schoolsLiveData.postValue(schools)
+
+            setSelectedSchool(0)
+        }
+    }
+
+    fun setSelectedSchool(position: Int) {
+        val school = schoolsLiveData.value?.get(position)
+        selectedSchoolLiveData.postValue(school).apply {
+            schoolYearsLiveData.postValue(school?.schoolyears
+                ?.map { it.value }
+                ?.sortedByDescending { it.yearId })
+            setSelectedSchoolYear(0)
+        }
+    }
+
     fun setSelectedSchoolYear(position: Int) {
-
-        val schoolYear = selectedStudentLiveData.value?.getSchool()?.schoolyears
-            ?.map { it.value }
-            ?.sortedByDescending { it.yearId }
-            ?.get(position)
-
-        selectedSchoolYearLiveData.postValue(schoolYear)
-        studentSchoolYear.postValue(StudentSchoolYear(selectedStudentLiveData.value, schoolYear))
+        val schoolYear = schoolYearsLiveData.value?.get(position)
+        selectedSchoolYear.postValue(schoolYear)
     }
 
     fun setIsConnected(connected: Boolean) {
-/*        if (connected)
-            refresh()*/
+        if (connected)
+            refresh()
     }
 
+    fun refresh() {
+        val students = repository.students;
+        if (students != null)
+            studentsMutableLiveDate.postValue(students)
+    }
 }

@@ -11,8 +11,8 @@ class AbsentsViewModel @Inject constructor(val repository: Repository) : ViewMod
     val liveData = MutableLiveData<List<Absent>>()
     val statusLiveData = MutableLiveData<Status<List<AbsentClass>>>()
 
-    fun get(schoolYear: SchoolYear) {
-        repository.getAbsents(schoolYear) {
+    fun get(timelineParams: TimelineParams) {
+        repository.getAbsents(timelineParams.studentClassId) {
             if (it.statusValue == StatusCode.FINISHED) {
                 liveData.postValue(it.result)
             } else {

@@ -3,7 +3,7 @@ package rs.tafilovic.mojesdnevnik.ui.fragment
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_list.*
 import rs.tafilovic.mojesdnevnik.MyApp
-import rs.tafilovic.mojesdnevnik.model.StudentSchoolYear
+import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.presentation.adapter.TimelineAdapter
 import rs.tafilovic.mojesdnevnik.util.Logger
 import rs.tafilovic.mojesdnevnik.viewmodel.TimelineViewModel
@@ -19,7 +19,7 @@ class TimelineFragment : BaseListFragment() {
         (requireContext().applicationContext as MyApp).appComponent().inject(this)
     }
 
-    override fun init(page: Int, studentSchoolYear: StudentSchoolYear) {
+    override fun init(page: Int, timelineParams: TimelineParams) {
         Logger.d(TAG, "init()")
         model.eventLiveData.observe(viewLifecycleOwner, Observer {
             val adapter = TimelineAdapter()
@@ -33,6 +33,6 @@ class TimelineFragment : BaseListFragment() {
             }
         })
 
-        model.getTimeline(studentSchoolYear)
+        model.getTimeline(timelineParams)
     }
 }

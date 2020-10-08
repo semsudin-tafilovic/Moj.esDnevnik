@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_main.*
 import rs.tafilovic.mojesdnevnik.R
 import rs.tafilovic.mojesdnevnik.model.StatusCode
-import rs.tafilovic.mojesdnevnik.model.StudentSchoolYear
+import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.ui.activitiy.BaseActivity
 import rs.tafilovic.mojesdnevnik.ui.activitiy.MainActivity
 import rs.tafilovic.mojesdnevnik.util.Logger
@@ -20,15 +20,15 @@ abstract class BaseListFragment : Fragment() {
 
     companion object {
         val PAGE_KEY = "page"
-        val STUDENT_YEAR_KEY = "student_school_year"
+        val TIMELINE_PARAMS = "timeline_params"
 
         inline fun <reified T : BaseListFragment> getInstance(
             page: Int,
-            studentSchoolYear: StudentSchoolYear
+            timelineParams: TimelineParams
         ): T {
             val bundle = Bundle().apply {
                 putInt(PAGE_KEY, page)
-                putParcelable(STUDENT_YEAR_KEY, studentSchoolYear)
+                putParcelable(TIMELINE_PARAMS, timelineParams)
             }
 
             val fragment = T::class.java.newInstance().apply {
@@ -46,7 +46,7 @@ abstract class BaseListFragment : Fragment() {
 
     abstract fun inject()
 
-    abstract fun init(page: Int, studentSchoolYear: StudentSchoolYear)
+    abstract fun init(page: Int, timelineParams: TimelineParams)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,10 +59,10 @@ abstract class BaseListFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         val page = arguments?.getInt(PAGE_KEY) ?: return
-        val studentSchoolYear =
-            arguments?.getParcelable<StudentSchoolYear>(STUDENT_YEAR_KEY) ?: return
+        val timelineParams =
+            arguments?.getParcelable<TimelineParams>(TIMELINE_PARAMS) ?: return
 
-        init(page, studentSchoolYear)
+        init(page, timelineParams)
     }
 
     protected fun showMessage(msg: String?) {

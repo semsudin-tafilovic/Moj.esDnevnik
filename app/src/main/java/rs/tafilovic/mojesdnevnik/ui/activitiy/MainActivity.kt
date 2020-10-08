@@ -54,13 +54,13 @@ class MainActivity : BaseActivity() {
             viewModel.setSelectedStudent(it.first())
         })
 
-        viewModel.selectedStudentLiveData.observe(this, Observer {
-            if (it == null) return@Observer
+        viewModel.selectedStudentLiveData.observe(this, Observer { student ->
+            if (student == null) return@Observer
 
-            supportActionBar?.title = it.fullName
+            supportActionBar?.title = student.fullName
 
-            val schools = it.schools.entries
-                .sortedByDescending { Integer.getInteger(it.key) }
+            val schools = student.schools.entries
+                .sortedByDescending { it.key.toInt() }
                 .map { it.value }
 
             setupSchoolsSpinner(schools)
@@ -74,11 +74,12 @@ class MainActivity : BaseActivity() {
                     .map { it.value }
 
             setupSchoolYearsSpinner(studentSchoolYears)
+            viewModel.setSelectedSchoolYear(0)
         })
 
-        viewModel.studentSchoolYear.observe(this, Observer {
+        viewModel.timelineParamsLiveData.observe(this, Observer {
             if (it == null) return@Observer
-            Logger.d(TAG, "studentSchoolYear.observer: $it")
+            Logger.d(TAG, "timelineParamsLiveData.observer: $it")
             setPagerAdapter(it)
         })
 
@@ -98,11 +99,13 @@ class MainActivity : BaseActivity() {
 
     }
 
-    private fun setPagerAdapter(studentSchoolYear: StudentSchoolYear) {
+    private fun setPagerAdapter(timelineParams: TimelineParams) {
+        if (timelineParams.studentId == null || timelineParams.schoolId == null || timelineParams.classId == null) return
+
         viewPageAdapter =
             MainPageAdapter(
                 this,
-                studentSchoolYear
+                timelineParams
             )
         viewPager.adapter = viewPageAdapter
 
