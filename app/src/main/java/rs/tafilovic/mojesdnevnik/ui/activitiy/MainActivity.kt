@@ -40,6 +40,8 @@ class MainActivity : BaseActivity() {
 
         (applicationContext as MyApp).appComponent().inject(this)
 
+        viewPageAdapter = MainPageAdapter(this, null)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
@@ -102,11 +104,8 @@ class MainActivity : BaseActivity() {
     private fun setPagerAdapter(timelineParams: TimelineParams) {
         if (timelineParams.studentId == null || timelineParams.schoolId == null || timelineParams.classId == null) return
 
-        viewPageAdapter =
-            MainPageAdapter(
-                this,
-                timelineParams
-            )
+        viewPageAdapter.timelineParams = timelineParams
+
         viewPager.adapter = viewPageAdapter
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->

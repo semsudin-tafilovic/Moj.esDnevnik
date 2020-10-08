@@ -14,8 +14,8 @@ class BehaviorsViewModel @Inject constructor(val repository: Repository) : ViewM
     val liveData = MutableLiveData<List<Behavior>>()
     val statusLiveData = MutableLiveData<Status<List<Behavior>>>()
 
-    fun get(timelineParams: TimelineParams) {
-        repository.getBehaviors(timelineParams.studentClassId) {
+    fun get(timelineParams: TimelineParams?) {
+        repository.getBehaviors(timelineParams?.studentClassId) {
             if (it.statusValue == StatusCode.FINISHED) {
                 liveData.postValue(it.result)
             } else {

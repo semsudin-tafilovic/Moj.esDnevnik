@@ -24,7 +24,7 @@ abstract class BaseListFragment : Fragment() {
 
         inline fun <reified T : BaseListFragment> getInstance(
             page: Int,
-            timelineParams: TimelineParams
+            timelineParams: TimelineParams?
         ): T {
             val bundle = Bundle().apply {
                 putInt(PAGE_KEY, page)

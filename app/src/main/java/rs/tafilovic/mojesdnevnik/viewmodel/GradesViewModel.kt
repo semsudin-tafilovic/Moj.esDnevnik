@@ -14,8 +14,8 @@ class GradesViewModel @Inject constructor(val repository: Repository) : ViewMode
     val liveData = MutableLiveData<List<FullGrades>>()
     val statusLiveData = MutableLiveData<Status<FullGrades>>()
 
-    fun get(timelineParams: TimelineParams) {
-        repository.getGrades(timelineParams.studentClassId) {
+    fun get(timelineParams: TimelineParams?) {
+        repository.getGrades(timelineParams?.studentClassId) {
             if (it.statusValue == StatusCode.FINISHED) {
                 liveData.postValue(it.result)
             } else {

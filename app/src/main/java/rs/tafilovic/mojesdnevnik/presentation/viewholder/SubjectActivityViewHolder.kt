@@ -34,12 +34,15 @@ class SubjectActivityViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val firstPart = subjectActivity.parts["1"]?.activities
         val secondPart = subjectActivity.parts["2"]?.activities
 
+        itemView.tvPartOneGrades.text=null
         firstPart?.forEach {
+            itemView.tvPartOneGrades.text=null
             val spannable = getIconText(itemView.tvPartOneGrades.context, it.type)
             itemView.tvPartOneGrades.append(spannable)
             itemView.tvPartOneGrades.append(" ")
         }
 
+        itemView.tvPartTwoGrades.text=null
         secondPart?.forEach {
             val spannable = getIconText(itemView.tvPartTwoGrades.context, it.type)
             itemView.tvPartTwoGrades.append(spannable)

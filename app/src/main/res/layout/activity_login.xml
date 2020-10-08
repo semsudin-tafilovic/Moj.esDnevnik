@@ -8,7 +8,7 @@
     android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
     tools:context=".ui.activitiy.LoginActivity">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="top"
@@ -58,7 +58,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etUsername"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -119,12 +120,12 @@
 
     <TextView
         android:id="@+id/tvDisclaimer"
+        style="@style/TextAppearance.AppCompat.Caption"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
         android:layout_gravity="bottom"
+        android:gravity="bottom"
         android:padding="10dp"
-        style="@style/TextAppearance.AppCompat.Caption"
-        android:text="Android aplikacija 'Moj esDnevnik' nije zvanična aplikacija Ministarstva prosvete, nauke i tehnološkog razvoja Republike Srbije. Ne snosnimo nikakvu odgovornost za validnost podataka. Aplikacija samo preuzima podatke sa portala moj.esdnevnik.rs i prikazuje ih u aplikaciji."/>
+        android:text="Android aplikacija 'Moj esDnevnik' nije zvanična aplikacija Ministarstva prosvete, nauke i tehnološkog razvoja Republike Srbije. Ne snosnimo nikakvu odgovornost za validnost podataka. Aplikacija samo preuzima podatke sa portala moj.esdnevnik.rs i prikazuje ih u aplikaciji." />
 
 </FrameLayout>

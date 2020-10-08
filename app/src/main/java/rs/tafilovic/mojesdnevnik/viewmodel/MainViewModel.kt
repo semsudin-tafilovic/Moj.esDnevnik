@@ -69,7 +69,7 @@ class MainViewModel @Inject constructor(val repository: Repository) : ViewModel(
     }
 
     fun refresh() {
-        val students = repository.students;
+        val students = repository.students
         if (students != null)
             studentsMutableLiveDate.postValue(students)
     }

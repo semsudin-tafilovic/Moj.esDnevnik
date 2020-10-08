@@ -8,7 +8,7 @@ import rs.tafilovic.mojesdnevnik.model.StudentSchoolYear
 import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.ui.fragment.*
 
-class MainPageAdapter(fragmentActivity: FragmentActivity, val timelineParams: TimelineParams) :
+class MainPageAdapter(fragmentActivity: FragmentActivity, var timelineParams: TimelineParams?) :
     FragmentStateAdapter(fragmentActivity) {
 
     val items = arrayOf(

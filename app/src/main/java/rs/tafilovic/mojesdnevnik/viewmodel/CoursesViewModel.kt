@@ -11,8 +11,8 @@ class CoursesViewModel @Inject constructor(val repository: Repository) : ViewMod
     val liveData = MutableLiveData<List<MainCourse>>()
     val statusLiveData = MutableLiveData<Status<List<MainCourse>>>()
 
-    fun get(timelineParams: TimelineParams) {
-        repository.getCourses(timelineParams.studentClassId) {
+    fun get(timelineParams: TimelineParams?) {
+        repository.getCourses(timelineParams?.studentClassId) {
             if (it.statusValue == StatusCode.FINISHED) {
                 liveData.postValue(it.result)
             } else {

@@ -11,8 +11,8 @@ class ActivitiesViewModel @Inject constructor(val repository: Repository) : View
     val liveData = MutableLiveData<List<SubjectActivity>>()
     val statusLiveData = MutableLiveData<Status<List<SubjectActivity>>>()
 
-    fun get(timelineParams: TimelineParams) {
-        repository.getActivities(timelineParams.studentClassId) {
+    fun get(timelineParams: TimelineParams?) {
+        repository.getActivities(timelineParams?.studentClassId) {
             if (it.statusValue == StatusCode.FINISHED) {
                 liveData.postValue(it.result)
             } else {
