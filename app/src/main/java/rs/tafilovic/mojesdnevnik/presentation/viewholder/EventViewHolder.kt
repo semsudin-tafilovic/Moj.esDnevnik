@@ -65,7 +65,7 @@ class EventViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         if (event == null) return
 
         itemView.apply {
-            tvDate.text = sdf.format(event.date)
+            tvDate.text = event.date
             tvClassName.text = event.course
             when (type) {
                 ITEM_FINAL_GRADE,

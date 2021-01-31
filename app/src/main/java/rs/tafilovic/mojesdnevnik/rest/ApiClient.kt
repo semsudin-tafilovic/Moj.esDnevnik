@@ -129,17 +129,18 @@ class ApiClient(cacheDir: File) {
     private val offlineInterceptor = OfflineInterceptor()
 
     private val okHttpClient = OkHttpClient().newBuilder()
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(10, TimeUnit.SECONDS)
+        .writeTimeout(10, TimeUnit.SECONDS)
         .cache(apiCache)
         .addInterceptor(cookieInterceptor)
         .addInterceptor(httpLoggingInterceptor)
         //.addNetworkInterceptor(networkInterceptor)
         .addInterceptor(offlineInterceptor)
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(10, TimeUnit.SECONDS)
-        .writeTimeout(10, TimeUnit.SECONDS)
         .build()
 
     private val gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
+
 
     private val retrofit: Retrofit = Retrofit.Builder()
         .client(okHttpClient)

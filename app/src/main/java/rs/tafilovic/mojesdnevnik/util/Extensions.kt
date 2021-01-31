@@ -11,6 +11,7 @@ import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
 import androidx.core.text.toSpanned
+import androidx.preference.PreferenceManager
 
 /**
  * File with some helper methods (mainly extension methods)
@@ -61,4 +62,12 @@ fun Context.runWithApi(minSdk: Int, maxSdk: Int? = null, action: () -> Unit) {
     if (Build.VERSION.SDK_INT in minSdk..targetSdk) {
         action()
     }
+}
+
+fun Context.getPrefsBoolean(name: String): Boolean {
+    return PreferenceManager.getDefaultSharedPreferences(this).getBoolean(name, false)
+}
+
+fun Context.setPrefsBoolean(name: String, value: Boolean) {
+    PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(name, value).apply()
 }

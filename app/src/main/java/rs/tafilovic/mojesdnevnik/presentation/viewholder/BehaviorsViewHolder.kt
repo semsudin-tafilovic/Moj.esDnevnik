@@ -9,14 +9,15 @@ import rs.tafilovic.mojesdnevnik.R
 import rs.tafilovic.mojesdnevnik.model.Behavior
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import java.util.*
 
 class BehaviorsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-    val sdf = SimpleDateFormat.getDateInstance(DateFormat.MEDIUM)
+    val sdf = SimpleDateFormat("dd. MM. yyyy.", Locale.getDefault())
 
     fun bind(behavior: Behavior) {
         itemView.apply {
-            tvDate.text = sdf.format(behavior.date)
+            tvDate.text = behavior.date;
             tvName.text = behavior.name
             tvNote.text = behavior.note
             tvNote.visibility = if (behavior.note.isNullOrEmpty()) View.GONE else View.VISIBLE

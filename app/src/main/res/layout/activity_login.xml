@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:keepScreenOn="true"
     android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
     tools:context=".ui.activitiy.LoginActivity">
 
@@ -16,13 +17,14 @@
         android:src="@drawable/education"
         android:tint="#D02C2C2C" />
 
+
     <TextView
         android:id="@+id/tvTitle"
         style="@style/TextAppearance.AppCompat.Display2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:fontFamily="cursive"
         android:gravity="center_horizontal"
         android:text="@string/app_name" />
@@ -45,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="10dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilUsername"
@@ -87,11 +89,34 @@
                 android:checked="true"
                 android:text="@string/remember_me" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/cbAcceptAgreement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/accept" />
+
+                <TextView
+                    android:id="@+id/tvLicenceAgreement"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="7dp"
+                    android:linksClickable="true"
+                    android:text="@string/licence_agreement"
+                    android:textColor="#70C2F8" />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:enabled="false"
                 android:text="@string/login" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -117,15 +142,5 @@
         android:text="@string/no_internet_connection"
         android:visibility="gone"
         tools:visibility="visible" />
-
-    <TextView
-        android:id="@+id/tvDisclaimer"
-        style="@style/TextAppearance.AppCompat.Caption"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="bottom"
-        android:padding="10dp"
-        android:text="Android aplikacija 'Moj esDnevnik' nije zvanična aplikacija Ministarstva prosvete, nauke i tehnološkog razvoja Republike Srbije. Ne snosnimo nikakvu odgovornost za validnost podataka. Aplikacija samo preuzima podatke sa portala moj.esdnevnik.rs i prikazuje ih u aplikaciji." />
 
 </FrameLayout>

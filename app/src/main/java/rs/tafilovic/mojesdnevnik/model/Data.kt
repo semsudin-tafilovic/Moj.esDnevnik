@@ -193,8 +193,8 @@ data class EvaluationElement(
 
 data class Event(
     val type: String,
-    val date: Date,
-    val createTime: Date,
+    val date: String,
+    val createTime: String,
     val fullGrade: String,
     val grade: Grade,
     val gradeCategory: String,
@@ -243,8 +243,8 @@ data class Event(
 }
 
 data class Activities(
-    val date: Date,
-    val createTime: Date,
+    val date: String,
+    val createTime: String,
     val type: Int,
     val note: String,
     val name: String,
@@ -283,8 +283,8 @@ data class SubjectActivity(
 
 data class FullGrade(
     val descriptive: Boolean,
-    val date: Date,
-    val createTime: Date,
+    val date: String,
+    val createTime: String,
     val fullGrade: String,
     val grade: Int,
     val gradeCategory: String,
@@ -357,7 +357,7 @@ data class AbsentClassDetails(
     val teacherNote: String?,
     val statusName: String?,
     val workHourNote: String?,
-    val workdayDate: Date
+    val workdayDate: String
 )
 
 data class Absent(
@@ -390,7 +390,7 @@ data class Absent(
 data class Behavior(
     val id: Long,
     val name: String,
-    val date: Date,
+    val date: String,
     val schoolyearPartId: Int,
     val note: String?
 ) {

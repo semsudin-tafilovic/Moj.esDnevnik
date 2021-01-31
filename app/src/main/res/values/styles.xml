@@ -9,4 +9,9 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <style name="EulaDialog" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+        <item name="android:windowMinWidthMajor">99%</item>
+        <item name="android:windowMinWidthMinor">95%</item>
+    </style>
+
 </resources>

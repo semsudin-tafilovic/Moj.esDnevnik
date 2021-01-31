@@ -6,22 +6,20 @@ import android.os.Handler
 import android.view.View
 import androidx.lifecycle.Observer
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
 import rs.tafilovic.mojesdnevnik.MyApp
 import rs.tafilovic.mojesdnevnik.R
 import rs.tafilovic.mojesdnevnik.model.StatusCode
-import rs.tafilovic.mojesdnevnik.util.KeyboardEventListener
-import rs.tafilovic.mojesdnevnik.util.Logger
-import rs.tafilovic.mojesdnevnik.util.PrefsHelper
+import rs.tafilovic.mojesdnevnik.ui.fragment.LicenceAgreementFragment
+import rs.tafilovic.mojesdnevnik.util.*
 import rs.tafilovic.mojesdnevnik.viewmodel.LoginViewModel
-import java.lang.RuntimeException
 import javax.inject.Inject
 
 class LoginActivity : BaseActivity() {
 
     override val TAG = this::class.java.name
+
+    private val ACCEPTED_LICENCE_AGREEMENT = "ACCEPTED_LICENCE_AGREEMENT"
 
     @Inject
     lateinit var loginViewModel: LoginViewModel
@@ -41,6 +39,7 @@ class LoginActivity : BaseActivity() {
         loginViewModel.studentsLiveData.observe(this, Observer {
             Logger.d(TAG, "Students: $it")
             if (it != null) {
+                this.setPrefsBoolean(ACCEPTED_LICENCE_AGREEMENT, cbAcceptAgreement.isChecked)
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
@@ -60,6 +59,10 @@ class LoginActivity : BaseActivity() {
             showToast(it.message)
         })
 
+        cbAcceptAgreement.setOnCheckedChangeListener { buttonView, isChecked ->
+            btnLogin.isEnabled = isChecked
+        }
+
         btnLogin.setOnClickListener { login() }
 
         etUsername.onFocusChangeListener = editTextFocusChangedListener
@@ -67,14 +70,22 @@ class LoginActivity : BaseActivity() {
 
         KeyboardEventListener(this) {
             tvTitle.visibility = if (it) View.GONE else View.VISIBLE
-            tvDisclaimer.visibility = if (it) View.GONE else View.VISIBLE
         }
+
+        tvLicenceAgreement.setOnClickListener {
+            LicenceAgreementFragment().show(
+                supportFragmentManager,
+                LicenceAgreementFragment::class.java.simpleName
+            )
+        }
+
+        cbAcceptAgreement.isChecked = this.getPrefsBoolean(ACCEPTED_LICENCE_AGREEMENT)
     }
 
     private fun login() {
         prefsHelper.removeCredentials()
-        username = etUsername.editableText?.toString()
-        password = etPassword.editableText?.toString()
+        username = etUsername.editableText?.toString()?.trim()
+        password = etPassword.editableText?.toString()?.trim()
         Logger.d(TAG, "btnLoginClick: username: $username password: $password")
         val rememberMe = cbSaveMe.isChecked
         loginViewModel.login(username, password, rememberMe)
@@ -95,6 +106,6 @@ class LoginActivity : BaseActivity() {
     override fun onConnectionChanged(connected: Boolean) {
         super.onConnectionChanged(connected)
         tvNoInternetConnection.visibility = if (connected) View.GONE else View.VISIBLE
-        btnLogin.isEnabled = connected
+        btnLogin.isEnabled = connected && cbAcceptAgreement.isChecked
     }
 }

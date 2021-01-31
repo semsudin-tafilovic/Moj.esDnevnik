@@ -12,17 +12,23 @@ import rs.tafilovic.mojesdnevnik.model.Student
 
 class StudentsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
+    val maleColor = Color.rgb(77, 138, 208)
+    val femaleColor = Color.rgb(239, 100, 192)
+
     fun bind(student: Student) {
+
+        val male = student.gender.equals("m", true)
+
         itemView.apply {
+
             ivIcon.apply {
-                setImageResource(
-                    if (student.gender.equals(
-                            "m",
-                            true
-                        )
-                    ) R.drawable.ic_student_male else R.drawable.ic_student_female
-                )
-                setColorFilter(Color.DKGRAY)
+                if (male) {
+                    setImageResource(R.drawable.ic_student_male)
+                    setColorFilter(maleColor)
+                } else {
+                    setImageResource(R.drawable.ic_student_female)
+                    setColorFilter(femaleColor)
+                }
             }
 
             val schools = student.schools.entries.sortedByDescending {
@@ -38,9 +44,19 @@ class StudentsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 ?.sortedByDescending { it.key.toInt() }
                 ?.map { it.value.section }
 
-            tvName.text = student.fullName
-            tvUniqueNumber.text = student.jmbg
-            tvSchool.text = "${school?.schoolName} (${section})"
+            tvName.apply {
+                text = student.fullName
+                setTextColor(if (male) maleColor else femaleColor)
+            }
+
+            tvUniqueNumber.apply {
+                text = student.jmbg
+                setTextColor(if (male) maleColor else femaleColor)
+            }
+
+            tvSchool.text = String.format("%s %s", school?.schoolName, section)
+            tvSchool.setTextColor(if (male) maleColor else femaleColor)
+            tvSchool.alpha = 0.7f
         }
     }
 

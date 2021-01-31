@@ -10,4 +10,10 @@
     <string name="remember_me">Zapamti me</string>
     <string name="no_internet_connection">Uređaj nema vezu sa internetom.</string>
     <string name="logout">Odjavi se</string>
+    <string name="accept_agreement">Prihvatam pravila i uslove korišćenja</string>
+    <string name="agreement_message">Android aplikacija \"Moj esDnevnik\" nije zvanična aplikacija Ministarstva prosvete, nauke i tehnološkog razvoja Republike Srbije. Ne snosnimo nikakvu odgovornost za validnost podataka. Aplikacija samo preuzima podatke sa portala moj.esdnevnik.rs i prikazuje ih u aplikaciji.</string>
+    <string name="accept">Prihvatam</string>
+    <string name="licence_agreement"><u>pravila i uslove korišćenja</u></string>
+    <string name="licence_agreement_title">Pravila i uslovi korišćenja</string>
+    <string name="close">Zatvori</string>
 </resources>
