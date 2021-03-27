@@ -22,8 +22,8 @@ android {
         applicationId "rs.tafilovic.mojesdnevnik"
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 16
-        versionName "1.1.6"
+        versionCode 17
+        versionName "1.1.7"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
