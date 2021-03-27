@@ -1,22 +1,22 @@
 package rs.tafilovic.mojesdnevnik.presentation.viewholder
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.row_subject_activity.view.*
 import rs.tafilovic.mojesdnevnik.R
+import rs.tafilovic.mojesdnevnik.databinding.RowSubjectActivity2Binding
 import rs.tafilovic.mojesdnevnik.model.FullGrade
 import rs.tafilovic.mojesdnevnik.model.FullGrades
 
-class GradesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class GradesViewHolder(private val itemBinding: RowSubjectActivity2Binding) :
+    RecyclerView.ViewHolder(itemBinding.root) {
 
     val napredovanje = "Напредовање\n"
     val angazovanje = "\nАнгажовање\n"
 
     fun bind(fg: FullGrades) {
-        itemView.tvClassName.text = fg.course
+        itemBinding.tvClassName.text = fg.course
 
         val gradeTypeId = fg.classCourseGradeTypeId
 
@@ -33,44 +33,44 @@ class GradesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         when (gradeTypeId) {
             1 -> {
-                itemView.tvPartOneFinalGrade.text = partOneFinalGrade.toString()
-                itemView.tvPartOneAverageGrade.text =
+                itemBinding.tvPartOneFinalGrade.text = partOneFinalGrade.toString()
+                itemBinding.tvPartOneAverageGrade.text =
                     if (partOneAverageGrade != 0f)
                         String.format("(%.2f)", partOneAverageGrade)
                     else "/"
 
-                itemView.tvPartTwoFinalGrade.text = partTwoFinalGrade.toString()
-                itemView.tvPartTwoAverageGrade.text =
+                itemBinding.tvPartTwoFinalGrade.text = partTwoFinalGrade.toString()
+                itemBinding.tvPartTwoAverageGrade.text =
                     if (partTwoAverageGrade != 0f)
                         String.format("(%.2f)", partTwoAverageGrade)
                     else "/"
             }
             2 -> {
-                itemView.tvPartOneFinalGrade.text = partOneFinalName ?: "/"
-                itemView.tvPartOneAverageGrade.text = ""
-                itemView.tvPartTwoFinalGrade.text = partTwoFinalName ?: "/"
-                itemView.tvPartTwoAverageGrade.text = ""
+                itemBinding.tvPartOneFinalGrade.text = partOneFinalName ?: "/"
+                itemBinding.tvPartOneAverageGrade.text = ""
+                itemBinding.tvPartTwoFinalGrade.text = partTwoFinalName ?: "/"
+                itemBinding.tvPartTwoAverageGrade.text = ""
             }
             5 -> {
-                itemView.tvPartOneFinalGrade.text =
+                itemBinding.tvPartOneFinalGrade.text =
                     if (partOneFinalName != null) napredovanje + partOneFinalName else "/"
-                itemView.tvPartOneAverageGrade.text =
+                itemBinding.tvPartOneAverageGrade.text =
                     if (partOneFinalEngagement != null) angazovanje + partOneFinalEngagement else "/"
-                itemView.tvPartTwoFinalGrade.text =
+                itemBinding.tvPartTwoFinalGrade.text =
                     if (partTwoFinalName != null) napredovanje + partTwoFinalName else "/"
-                itemView.tvPartTwoAverageGrade.text =
+                itemBinding.tvPartTwoAverageGrade.text =
                     if (partTwoFinalEngagement != null) angazovanje + partTwoFinalEngagement else "/"
             }
             else -> {
-                itemView.tvPartOneFinalGrade.text = "/"
-                itemView.tvPartOneAverageGrade.text = "/"
-                itemView.tvPartTwoFinalGrade.text = "/"
-                itemView.tvPartTwoAverageGrade.text = "/"
+                itemBinding.tvPartOneFinalGrade.text = "/"
+                itemBinding.tvPartOneAverageGrade.text = "/"
+                itemBinding.tvPartTwoFinalGrade.text = "/"
+                itemBinding.tvPartTwoAverageGrade.text = "/"
             }
         }
 
-        bindGrades(itemView.tvPartOneGrades, fg.parts["1"]?.grades)
-        bindGrades(itemView.tvPartTwoGrades, fg.parts["2"]?.grades)
+        bindGrades(itemBinding.tvPartOneGrades, fg.parts["1"]?.grades)
+        bindGrades(itemBinding.tvPartTwoGrades, fg.parts["2"]?.grades)
     }
 
     private fun bindGrades(tv: TextView, grades: List<FullGrade>?) {
@@ -94,10 +94,10 @@ class GradesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     companion object {
         fun init(parent: ViewGroup): GradesViewHolder {
-            val view =
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.row_subject_activity2, parent, false)
-            return GradesViewHolder(view)
+            val itemBinding: RowSubjectActivity2Binding = RowSubjectActivity2Binding.inflate(
+                LayoutInflater.from(parent.context), parent, false
+            )
+            return GradesViewHolder(itemBinding)
         }
     }
 }

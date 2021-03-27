@@ -6,8 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.activity_main.*
-import rs.tafilovic.mojesdnevnik.R
+import rs.tafilovic.mojesdnevnik.databinding.FragmentListBinding
 import rs.tafilovic.mojesdnevnik.model.StatusCode
 import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.ui.activitiy.BaseActivity
@@ -17,6 +16,9 @@ import rs.tafilovic.mojesdnevnik.util.Logger
 abstract class BaseListFragment : Fragment() {
     val TAG = this.javaClass.name
 
+    private var _binding: FragmentListBinding? = null
+
+    protected val binding get() = _binding!!
 
     companion object {
         val PAGE_KEY = "page"
@@ -53,7 +55,8 @@ abstract class BaseListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_list, container, false)
+        _binding = FragmentListBinding.inflate(inflater, container, false);
+        return binding.root
     }
 
     override fun onStart() {
@@ -74,8 +77,12 @@ abstract class BaseListFragment : Fragment() {
     protected fun updateState(statsCode: StatusCode) {
         Logger.d(TAG, "updateStatus() - status: $statsCode")
         if (activity is MainActivity) {
-            (activity as MainActivity).progressLoader.visibility =
-                if (statsCode == StatusCode.LOADING) View.VISIBLE else View.GONE
+            (activity as MainActivity).setProgressVisibility(if (statsCode == StatusCode.LOADING) View.VISIBLE else View.GONE)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

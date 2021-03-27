@@ -7,10 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.fragment_licence_agreement.*
 import rs.tafilovic.mojesdnevnik.R
+import rs.tafilovic.mojesdnevnik.databinding.FragmentLicenceAgreementBinding
 
 class LicenceAgreementFragment : DialogFragment() {
+
+    private var _binding: FragmentLicenceAgreementBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,8 +24,9 @@ class LicenceAgreementFragment : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_licence_agreement, container, false)
+    ): View {
+        _binding = FragmentLicenceAgreementBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     @Suppress("DEPRECATION")
@@ -33,12 +37,17 @@ class LicenceAgreementFragment : DialogFragment() {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            tvContent.text = Html.fromHtml(eulaStream, Html.FROM_HTML_MODE_COMPACT)
+            binding.tvContent.text = Html.fromHtml(eulaStream, Html.FROM_HTML_MODE_COMPACT)
         else
-            tvContent.text = Html.fromHtml(eulaStream)
+            binding.tvContent.text = Html.fromHtml(eulaStream)
 
-        btnClose.setOnClickListener {
+        binding.btnClose.setOnClickListener {
             dismiss()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

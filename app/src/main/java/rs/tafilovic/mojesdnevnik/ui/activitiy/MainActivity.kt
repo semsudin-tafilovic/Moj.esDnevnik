@@ -10,9 +10,9 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.activity_main.*
 import rs.tafilovic.mojesdnevnik.MyApp
 import rs.tafilovic.mojesdnevnik.R
+import rs.tafilovic.mojesdnevnik.databinding.ActivityMainBinding
 import rs.tafilovic.mojesdnevnik.model.*
 import rs.tafilovic.mojesdnevnik.presentation.adapter.MainPageAdapter
 import rs.tafilovic.mojesdnevnik.ui.fragment.StudentsFragment
@@ -26,6 +26,8 @@ class MainActivity : BaseActivity() {
 
     override val TAG = this.javaClass.name
 
+    private lateinit var binding: ActivityMainBinding
+
     @Inject
     lateinit var viewModel: MainViewModel
 
@@ -37,17 +39,17 @@ class MainActivity : BaseActivity() {
     private lateinit var students: List<Student>
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         (applicationContext as MyApp).appComponent().inject(this)
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        setSupportActionBar(binding.toolbar)
 
         viewPageAdapter = MainPageAdapter(this, null)
 
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
-
-        spSchoolYears.onItemSelectedListener = onSchoolYearSelected
-        spSchoolName.onItemSelectedListener = onSchoolSelected
+        binding.spSchoolYears.onItemSelectedListener = onSchoolYearSelected
+        binding.spSchoolName.onItemSelectedListener = onSchoolSelected
 
         viewModel.studentsMutableLiveDate.observe(this, Observer {
             if (it == null) return@Observer
@@ -89,9 +91,9 @@ class MainActivity : BaseActivity() {
             if (it == null) return@Observer
             Logger.d(TAG, "onStateMutableLiveData() - status = ${it.statusValue}")
             if (it.statusValue == StatusCode.LOADING) {
-                progressLoader.visibility = View.VISIBLE
+                binding.progressLoader.visibility = View.VISIBLE
             } else {
-                progressLoader.visibility = View.GONE
+                binding.progressLoader.visibility = View.GONE
                 if (it.statusValue == StatusCode.ERROR) {
                     val msg = "Error - code: ${it.message}, message: ${it.message}"
                     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
@@ -106,9 +108,9 @@ class MainActivity : BaseActivity() {
 
         viewPageAdapter.timelineParams = timelineParams
 
-        viewPager.adapter = viewPageAdapter
+        binding.viewPager.adapter = viewPageAdapter
 
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = viewPageAdapter.items[position]
         }.attach()
     }
@@ -161,7 +163,7 @@ class MainActivity : BaseActivity() {
             }
         val spinnerAdapter =
             ArrayAdapter(this, R.layout.row_school_year, items)
-        spSchoolYears.adapter = spinnerAdapter
+        binding.spSchoolYears.adapter = spinnerAdapter
     }
 
     private fun setupSchoolsSpinner(schools: List<School>?) {
@@ -172,7 +174,7 @@ class MainActivity : BaseActivity() {
             schools.map { String.format("%s", it.schoolName) }
         val spinnerAdapter =
             ArrayAdapter(this, R.layout.row_school_year, items)
-        spSchoolName.adapter = spinnerAdapter
+        binding.spSchoolName.adapter = spinnerAdapter
     }
 
     private val onSchoolSelected = object : AdapterView.OnItemSelectedListener {
@@ -206,6 +208,10 @@ class MainActivity : BaseActivity() {
     override fun onConnectionChanged(connected: Boolean) {
         super.onConnectionChanged(connected)
         viewModel.setIsConnected(connected)
-        tvNoInternetConnection.visibility = if (connected) View.GONE else View.VISIBLE
+        binding.tvNoInternetConnection.visibility = if (connected) View.GONE else View.VISIBLE
+    }
+
+    fun setProgressVisibility(visibility: Int) {
+        binding.progressLoader.visibility = visibility
     }
 }

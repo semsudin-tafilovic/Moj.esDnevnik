@@ -15,7 +15,7 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -59,34 +59,31 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.flexbox.FlexboxLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#EAE9E9"
-            android:orientation="horizontal"
-            android:paddingStart="10dp"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            tools:ignore="RtlSymmetry">
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            app:alignItems="stretch"
+            app:alignContent="stretch"
+            app:flexWrap="nowrap">
 
             <Spinner
                 android:id="@+id/spSchoolName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="100dp"
-                android:theme="@style/ThemeOverlay.MaterialComponents.Light"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_flexBasisPercent="60%"
+                android:theme="@style/ThemeOverlay.MaterialComponents.Light" />
 
             <Spinner
                 android:id="@+id/spSchoolYears"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minWidth="100dp"
-                android:theme="@style/ThemeOverlay.MaterialComponents.Light"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:textAlignment="viewEnd"
+                app:layout_flexBasisPercent="40%"
+                android:theme="@style/ThemeOverlay.MaterialComponents.Light" />
+        </com.google.android.flexbox.FlexboxLayout>
 
         <TextView
             android:id="@+id/tvNoInternetConnection"
@@ -109,7 +106,6 @@
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <ProgressBar

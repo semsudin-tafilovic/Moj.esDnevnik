@@ -177,7 +177,7 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
 
     private fun readStream(inputStream: InputStream): String {
         val reader = BufferedReader(inputStream.reader(Charsets.UTF_8))
-        var output = ""
+        var output: String
         reader.use {
             output = it.readText()
         }

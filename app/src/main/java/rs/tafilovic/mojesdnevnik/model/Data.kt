@@ -3,7 +3,8 @@ package rs.tafilovic.mojesdnevnik.model
 import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 data class SchoolYearPart(
@@ -17,7 +18,7 @@ data class Course(var name: String, var parts: List<SchoolYearPart>)
 
 @Parcelize
 data class SchoolClass(val section: String, val studentClassId: String) : Parcelable {
-    var id: String? = null
+    @IgnoredOnParcel var id: String? = null
 }
 
 @Parcelize
@@ -30,7 +31,7 @@ data class SchoolYear(
 @Parcelize
 data class School(val schoolName: String, val schoolyears: HashMap<String, SchoolYear>) :
     Parcelable {
-    var id: String? = null
+    @IgnoredOnParcel var id: String? = null
 }
 
 @Parcelize

@@ -1,7 +1,6 @@
 package rs.tafilovic.mojesdnevnik.ui.fragment
 
 import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.fragment_list.*
 import rs.tafilovic.mojesdnevnik.MyApp
 import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.presentation.adapter.ActivitiesAdapter
@@ -21,7 +20,7 @@ class ActivitiesFragment : BaseListFragment() {
     }
 
     override fun init(page: Int, timelineParams: TimelineParams) {
-        recycler.adapter = adapter
+        binding.recycler.adapter = adapter
 
         viewModel.liveData.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)

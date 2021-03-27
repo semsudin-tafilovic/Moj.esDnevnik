@@ -6,8 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_students.*
-import rs.tafilovic.mojesdnevnik.R
+import rs.tafilovic.mojesdnevnik.databinding.FragmentStudentsBinding
 import rs.tafilovic.mojesdnevnik.model.Student
 import rs.tafilovic.mojesdnevnik.presentation.adapter.StudentsAdapter
 
@@ -17,6 +16,9 @@ import rs.tafilovic.mojesdnevnik.presentation.adapter.StudentsAdapter
 class StudentsFragment : DialogFragment() {
 
     private val TAG = StudentsFragment::class.java.name
+
+    private var _binding: FragmentStudentsBinding? = null
+    private val binding get() = _binding!!
 
     private var adapter: StudentsAdapter? = null
 
@@ -37,8 +39,8 @@ class StudentsFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_students, container, false)
+        _binding = FragmentStudentsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,12 +52,17 @@ class StudentsFragment : DialogFragment() {
                 dismiss()
             }
 
-        recycler.adapter = adapter
+        binding.recycler.adapter = adapter
 
         val students = arguments?.getParcelableArrayList<Student>(STUDENTS_KEY)
         if (students != null) {
             adapter?.submitList(students)
         }
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
 
     }
 

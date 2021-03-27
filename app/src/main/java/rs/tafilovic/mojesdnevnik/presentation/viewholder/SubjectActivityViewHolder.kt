@@ -9,54 +9,58 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.row_subject_activity.view.*
 import rs.tafilovic.mojesdnevnik.R
+import rs.tafilovic.mojesdnevnik.databinding.RowSubjectActivityBinding
+import rs.tafilovic.mojesdnevnik.model.SubjectActivity
 import rs.tafilovic.mojesdnevnik.presentation.res.icon_bad
 import rs.tafilovic.mojesdnevnik.presentation.res.icon_good
 import rs.tafilovic.mojesdnevnik.presentation.res.icon_neutral
-import rs.tafilovic.mojesdnevnik.model.SubjectActivity
 import rs.tafilovic.mojesdnevnik.util.FontManager
 
-class SubjectActivityViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class SubjectActivityViewHolder(private val itemBinding: RowSubjectActivityBinding) :
+    RecyclerView.ViewHolder(itemBinding.root) {
 
     companion object {
         fun init(parent: ViewGroup): SubjectActivityViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.row_subject_activity, parent, false)
-            return SubjectActivityViewHolder(view)
+            val itemBinding = RowSubjectActivityBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+            return SubjectActivityViewHolder(itemBinding)
         }
     }
 
     fun bind(subjectActivity: SubjectActivity) {
 
-        itemView.tvClassName.text = subjectActivity.course
+        itemBinding.tvClassName.text = subjectActivity.course
 
         val firstPart = subjectActivity.parts["1"]?.activities
         val secondPart = subjectActivity.parts["2"]?.activities
 
-        itemView.tvPartOneGrades.text=null
+        itemBinding.tvPartOneGrades.text = null
         firstPart?.forEach {
-            itemView.tvPartOneGrades.text=null
-            val spannable = getIconText(itemView.tvPartOneGrades.context, it.type)
-            itemView.tvPartOneGrades.append(spannable)
-            itemView.tvPartOneGrades.append(" ")
+            itemBinding.tvPartOneGrades.text = null
+            val spannable = getIconText(itemView.context, it.type)
+            itemBinding.tvPartOneGrades.append(spannable)
+            itemBinding.tvPartOneGrades.append(" ")
         }
 
-        itemView.tvPartTwoGrades.text=null
+        itemBinding.tvPartTwoGrades.text = null
         secondPart?.forEach {
-            val spannable = getIconText(itemView.tvPartTwoGrades.context, it.type)
-            itemView.tvPartTwoGrades.append(spannable)
-            itemView.tvPartTwoGrades.append(" ")
+            val spannable = getIconText(itemView.context, it.type)
+            itemBinding.tvPartTwoGrades.append(spannable)
+            itemBinding.tvPartTwoGrades.append(" ")
         }
 
-        itemView.tvPartOneGrades.typeface =
+        itemBinding.tvPartOneGrades.typeface =
             FontManager.getTypeFace(itemView.context, FontManager.FONTAWESOME)
 
-        itemView.tvPartTwoGrades.typeface =
+        itemBinding.tvPartTwoGrades.typeface =
             FontManager.getTypeFace(itemView.context, FontManager.FONTAWESOME)
 
-        itemView.cardFinalOne.visibility = View.GONE
-        itemView.cardFinalTwo.visibility = View.GONE
+        itemBinding.cardFinalOne.visibility = View.GONE
+        itemBinding.cardFinalTwo.visibility = View.GONE
     }
 
     private fun getIcon(type: Int): String {
