@@ -51,7 +51,7 @@ private val HEADER_CACHE_CONTROL = "Cache-Control"
 private val NO_AUTHENTICATION = "No-Authentication"
 
 
-class CookieInterceptor() : Interceptor {
+class CookieInterceptor : Interceptor {
 
     val TAG = this.javaClass.name
     override fun intercept(chain: Interceptor.Chain): Response {

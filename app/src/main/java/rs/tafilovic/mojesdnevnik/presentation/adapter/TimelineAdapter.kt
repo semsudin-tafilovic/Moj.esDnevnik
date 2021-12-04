@@ -18,12 +18,14 @@ import rs.tafilovic.mojesdnevnik.databinding.RowEventFinalGradeDescBinding
 import rs.tafilovic.mojesdnevnik.databinding.RowEventGradeDescBinding
 import rs.tafilovic.mojesdnevnik.model.Event
 import rs.tafilovic.mojesdnevnik.presentation.adapter.TimelineAdapter.Companion.appearance_icon
+import rs.tafilovic.mojesdnevnik.presentation.adapter.TimelineAdapter.Companion.getColor
 import rs.tafilovic.mojesdnevnik.presentation.adapter.TimelineAdapter.Companion.getIcon
 import rs.tafilovic.mojesdnevnik.presentation.adapter.TimelineAdapter.Companion.setAppearance
 import rs.tafilovic.mojesdnevnik.presentation.res.icon_bad
 import rs.tafilovic.mojesdnevnik.presentation.res.icon_good
 import rs.tafilovic.mojesdnevnik.presentation.res.icon_neutral
 import rs.tafilovic.mojesdnevnik.util.FontManager
+import rs.tafilovic.mojesdnevnik.util.fromHtml
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
@@ -60,8 +62,16 @@ class TimelineAdapter : PagedListAdapter<Event, RecyclerView.ViewHolder>(Event.D
         fun getIcon(cssClass: String): String {
             return when (cssClass) {
                 "bad" -> icon_bad
-                "meh" -> icon_neutral
-                else -> icon_good
+                "good" -> icon_good
+                else -> icon_neutral
+            }
+        }
+
+        fun getColor(cssClass: String):Int{
+            return when (cssClass) {
+                "bad" -> R.color.red
+                "good" -> R.color.green
+                else -> R.color.orange
             }
         }
     }
@@ -138,16 +148,20 @@ class AbsentViewHolder(private val itemBinding: RowEventAbsentBinding) :
 
 class ActivityViewHolder(private val itemBinding: RowEventBinding) :
     RecyclerView.ViewHolder(itemBinding.root) {
+
     fun bind(event: Event) {
+        val color=ContextCompat.getColor(itemView.context,getColor(event.cssClass))
+
         itemBinding.tvDate.text = event.date
         itemBinding.tvClassName.text = event.course
         itemBinding.tvGrade.setAppearance(appearance_icon)
         itemBinding.tvGrade.text = getIcon(event.cssClass)
+        itemBinding.tvGrade.setTextColor(color)
         itemBinding.tvGradeName.visibility = View.GONE
         itemBinding.tvGrade.typeface =
             FontManager.getTypeFace(itemView.context, FontManager.FONTAWESOME)
-        itemBinding.tvNote.text = event.note
-        itemBinding.viewColorIndicator.setBackgroundColor(Color.GRAY)
+        itemBinding.tvNote.text = event.note.fromHtml()
+        itemBinding.viewColorIndicator.setBackgroundColor(color)
     }
 
     companion object {
@@ -167,7 +181,7 @@ class GradeViewHolder(private val itemBinding: RowEventBinding) :
         itemBinding.tvGrade.setAppearance(TimelineAdapter.appearance_text)
         itemBinding.tvGrade.text = event.grade.value.toString()
         itemBinding.tvGradeName.text = event.fullGrade
-        itemBinding.tvNote.text = event.note
+        itemBinding.tvNote.text = event.note.fromHtml()
         itemBinding.viewColorIndicator.setBackgroundColor(Color.BLUE)
     }
 

@@ -16,4 +16,9 @@
     <string name="licence_agreement"><u>pravila i uslove korišćenja</u></string>
     <string name="licence_agreement_title">Pravila i uslovi korišćenja</string>
     <string name="close">Zatvori</string>
+    <string name="nema_podataka_za_izabranog_ucenika_skolu_i_razred">Nema podataka za izabranog učenika, školu i razred.</string>
+    <string name="select_school">Izaberite školu</string>
+    <string name="select_school_year">Izaberite razred (školsku godinu)</string>
+    <string name="no_activity_for_selected_class">Nema aktivnosti za izabrani predmet</string>
+    <string name="no_grades">Ne postoje unete ocene za ovaj predmet.</string>
 </resources>

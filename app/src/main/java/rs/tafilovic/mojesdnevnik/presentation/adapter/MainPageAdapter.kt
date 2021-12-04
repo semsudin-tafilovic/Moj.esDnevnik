@@ -3,8 +3,6 @@ package rs.tafilovic.mojesdnevnik.presentation.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import rs.tafilovic.mojesdnevnik.model.Student
-import rs.tafilovic.mojesdnevnik.model.StudentSchoolYear
 import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.ui.fragment.*
 

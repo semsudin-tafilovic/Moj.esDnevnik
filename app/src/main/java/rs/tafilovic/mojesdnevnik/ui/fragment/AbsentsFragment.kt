@@ -1,6 +1,5 @@
 package rs.tafilovic.mojesdnevnik.ui.fragment
 
-import androidx.lifecycle.Observer
 import rs.tafilovic.mojesdnevnik.MyApp
 import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.presentation.adapter.AbsentsAdapter
@@ -21,13 +20,13 @@ class AbsentsFragment : BaseListFragment() {
     override fun init(page: Int, timelineParams: TimelineParams) {
         binding.recycler.adapter = adapter
 
-        viewModel.liveData.observe(viewLifecycleOwner, Observer {
+        viewModel.liveData.observe(viewLifecycleOwner) {
             adapter.submitList(it)
-        })
+        }
 
-        viewModel.statusLiveData.observe(viewLifecycleOwner, Observer {
-            showMessage(it.message)
-        })
+        viewModel.statusLiveData.observe(viewLifecycleOwner) {
+            onLoadingStatusChanged(it, adapter.itemCount)
+        }
 
         viewModel.get(timelineParams)
     }

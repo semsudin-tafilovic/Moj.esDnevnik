@@ -28,8 +28,8 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
     private val GET = "GET"
     private val POST = "POST"
     private val login_url = "https://moj.esdnevnik.rs/login"
-    private val username_text = "username";
-    private val password_text = "password";
+    private val username_text = "username"
+    private val password_text = "password"
     private val token_text = "_token"
     private val user_agent_text = "User-Agent"
     private val userAgent =
@@ -172,7 +172,7 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
     private fun selectToken(html: String): String {
         val document = Jsoup.parse(html)
         return document.select("body > div.main-wrap > div > div.login-wrap-right > div.tab.active > form > input[type=hidden]")
-            .first().attr("value")
+            .first()?.attr("value") ?: ""
     }
 
     private fun readStream(inputStream: InputStream): String {

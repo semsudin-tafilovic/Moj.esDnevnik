@@ -63,26 +63,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#EAE9E9"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="5dp"
-            app:alignItems="stretch"
+            android:paddingHorizontal="5dp"
+            android:paddingVertical="0dp"
             app:alignContent="stretch"
-            app:flexWrap="nowrap">
+            app:alignItems="stretch"
+            app:flexWrap="nowrap"
+            app:justifyContent="space_between">
 
-            <Spinner
-                android:id="@+id/spSchoolName"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:layout_flexBasisPercent="60%"
-                android:theme="@style/ThemeOverlay.MaterialComponents.Light" />
+            <!-- <Spinner
+                 android:id="@+id/spSchoolName"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 app:layout_flexBasisPercent="60%"
+                 android:theme="@style/ThemeOverlay.MaterialComponents.Light" />
 
-            <Spinner
-                android:id="@+id/spSchoolYears"
+             <Spinner
+                 android:id="@+id/spSchoolYears"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:textAlignment="viewEnd"
+                 app:layout_flexBasisPercent="40%"
+                 android:theme="@style/ThemeOverlay.MaterialComponents.Light" />-->
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipSchool"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:textAlignment="viewEnd"
-                app:layout_flexBasisPercent="40%"
-                android:theme="@style/ThemeOverlay.MaterialComponents.Light" />
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                app:chipIcon="@drawable/ic_school"
+                app:chipIconTint="@android:color/black"
+                app:chipStartPadding="10dp"
+                app:chipStrokeColor="@color/colorPrimary"
+                app:chipStrokeWidth="1dp"
+                app:layout_flexBasisPercent="57%"
+                tools:text="Rifat Burdzovic Trso Rifat Burdzovic Trso" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipSchoolYear"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                app:chipIcon="@drawable/ic_folder"
+                app:chipIconTint="@android:color/black"
+                app:chipStartPadding="10dp"
+                app:chipStrokeColor="@color/colorPrimary"
+                app:chipStrokeWidth="1dp"
+                app:layout_flexBasisPercent="37%"
+                tools:text="V-1 (2022)" />
         </com.google.android.flexbox.FlexboxLayout>
 
         <TextView

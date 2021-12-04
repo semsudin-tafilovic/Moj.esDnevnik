@@ -2,8 +2,8 @@ package rs.tafilovic.mojesdnevnik.presentation.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import rs.tafilovic.mojesdnevnik.presentation.viewholder.StudentsViewHolder
 import rs.tafilovic.mojesdnevnik.model.Student
+import rs.tafilovic.mojesdnevnik.presentation.viewholder.StudentsViewHolder
 
 class StudentsAdapter(val onStudentSelected: (Student) -> Unit) :
     ListAdapter<Student, StudentsViewHolder>(Student.DIF_UTIL) {

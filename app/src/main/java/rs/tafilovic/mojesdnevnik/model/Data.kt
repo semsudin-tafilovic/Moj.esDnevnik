@@ -258,6 +258,8 @@ data class SubjectActivity(
     val course: String,
     val classCourseId: Long,
     val sequence: Int,
+    val createTime: Date?,
+    val date: Date?,
     val parts: HashMap<String, ActivitiesPart>
 ) {
     companion object {
@@ -273,7 +275,10 @@ data class SubjectActivity(
                 oldItem: SubjectActivity,
                 newItem: SubjectActivity
             ): Boolean {
-                return oldItem.course == newItem.course && oldItem.classCourseId == newItem.classCourseId && oldItem.sequence == newItem.sequence
+                return oldItem.course == newItem.course &&
+                        oldItem.classCourseId == newItem.classCourseId &&
+                        oldItem.sequence == newItem.sequence &&
+                        oldItem.createTime==newItem.createTime
             }
 
         }

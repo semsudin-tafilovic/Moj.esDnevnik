@@ -18,7 +18,8 @@ class StudentsFragment : DialogFragment() {
     private val TAG = StudentsFragment::class.java.name
 
     private var _binding: FragmentStudentsBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentStudentsBinding
+        get() = _binding!!
 
     private var adapter: StudentsAdapter? = null
 
@@ -63,7 +64,7 @@ class StudentsFragment : DialogFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-
+        _binding = null
     }
 
 }

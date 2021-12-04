@@ -36,7 +36,7 @@ class LoginActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         (applicationContext as MyApp).appComponent().inject(this)
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater);
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 

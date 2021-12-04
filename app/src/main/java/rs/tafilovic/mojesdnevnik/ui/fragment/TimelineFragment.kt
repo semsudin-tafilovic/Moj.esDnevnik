@@ -1,6 +1,5 @@
 package rs.tafilovic.mojesdnevnik.ui.fragment
 
-import androidx.lifecycle.Observer
 import rs.tafilovic.mojesdnevnik.MyApp
 import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.presentation.adapter.TimelineAdapter
@@ -20,17 +19,17 @@ class TimelineFragment : BaseListFragment() {
 
     override fun init(page: Int, timelineParams: TimelineParams) {
         Logger.d(TAG, "init()")
-        model.eventLiveData.observe(viewLifecycleOwner, Observer {
-            val adapter = TimelineAdapter()
-            binding.recycler.adapter = adapter
-            adapter.submitList(it)
-        })
+        val adapter = TimelineAdapter()
+        binding.recycler.adapter = adapter
 
-        model.getState().observe(viewLifecycleOwner, Observer {
+        model.eventLiveData.observe(viewLifecycleOwner) { adapter.submitList(it) }
+
+        model.getState().observe(viewLifecycleOwner) {
             it?.let {
                 updateState(it.statusValue)
+                onLoadingStatusChanged(it, adapter.itemCount)
             }
-        })
+        }
 
         model.getTimeline(timelineParams)
     }

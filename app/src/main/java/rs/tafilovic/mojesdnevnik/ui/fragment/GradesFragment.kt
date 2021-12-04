@@ -1,7 +1,7 @@
 package rs.tafilovic.mojesdnevnik.ui.fragment
 
-import androidx.lifecycle.Observer
 import rs.tafilovic.mojesdnevnik.MyApp
+import rs.tafilovic.mojesdnevnik.R
 import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.presentation.adapter.GradesAdapter
 import rs.tafilovic.mojesdnevnik.viewmodel.GradesViewModel
@@ -9,8 +9,7 @@ import javax.inject.Inject
 
 class GradesFragment : BaseListFragment() {
 
-    private val adapter =
-        GradesAdapter()
+    lateinit var adapter: GradesAdapter
 
     @Inject
     lateinit var viewModel: GradesViewModel
@@ -20,14 +19,26 @@ class GradesFragment : BaseListFragment() {
     }
 
     override fun init(page: Int, timelineParams: TimelineParams) {
-        binding.recycler.adapter = adapter
-        viewModel.liveData.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
-        })
+        adapter = GradesAdapter {
+            val grades = it.parts.flatMap { it.value.grades }
+            if (grades.isNullOrEmpty()) {
+                showMessage(getString(R.string.no_grades))
+            } else {
+                GradeDetailsFragmentDialog().also {
+                    it.submitItems(grades)
+                    it.show(childFragmentManager, GradeDetailsFragmentDialog.TAG)
+                }
+            }
+        }
 
-        viewModel.statusLiveData.observe(viewLifecycleOwner, Observer {
+        binding.recycler.adapter = adapter
+        viewModel.liveData.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
+        viewModel.statusLiveData.observe(viewLifecycleOwner) {
             showMessage(it.message)
-        })
+        }
 
         viewModel.get(timelineParams)
     }

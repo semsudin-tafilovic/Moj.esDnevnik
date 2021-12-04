@@ -15,7 +15,6 @@ class Repository(
     private val TAG = this::class.java.name
 
     var students: List<Student>? = null
-        get
         private set
 
     lateinit var cookies: String
@@ -119,7 +118,7 @@ class Repository(
             apiClient.getApiService().getGrades(studentClassId)
                 .enqueue(object : Callback<List<FullGrades>> {
                     override fun onFailure(call: Call<List<FullGrades>>, t: Throwable) {
-                        Logger.e(TAG, "getGrades() - error: "+t.message);
+                        Logger.e(TAG, "getGrades() - error: "+t.message)
                         notifyError(t, onResult)
                     }
 

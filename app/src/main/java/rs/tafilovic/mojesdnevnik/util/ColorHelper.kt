@@ -1,6 +1,5 @@
 package rs.tafilovic.mojesdnevnik.util
 
-import android.graphics.Color
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import rs.tafilovic.mojesdnevnik.R

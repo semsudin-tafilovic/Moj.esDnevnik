@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import rs.tafilovic.mojesdnevnik.databinding.FragmentListBinding
+import rs.tafilovic.mojesdnevnik.model.Status
 import rs.tafilovic.mojesdnevnik.model.StatusCode
 import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.ui.activitiy.BaseActivity
@@ -18,7 +19,8 @@ abstract class BaseListFragment : Fragment() {
 
     private var _binding: FragmentListBinding? = null
 
-    protected val binding get() = _binding!!
+    protected val binding: FragmentListBinding
+        get() = _binding!!
 
     companion object {
         val PAGE_KEY = "page"
@@ -55,7 +57,7 @@ abstract class BaseListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentListBinding.inflate(inflater, container, false);
+        _binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -78,6 +80,15 @@ abstract class BaseListFragment : Fragment() {
         Logger.d(TAG, "updateStatus() - status: $statsCode")
         if (activity is MainActivity) {
             (activity as MainActivity).setProgressVisibility(if (statsCode == StatusCode.LOADING) View.VISIBLE else View.GONE)
+        }
+    }
+
+    protected fun <T> onLoadingStatusChanged(it:Status<T>, itemCount:Int){
+        showMessage(it.message)
+        if (it.statusValue != StatusCode.LOADING) {
+            binding.llNoData.visibility =
+                if (itemCount == 0) View.VISIBLE else View.GONE
+            Logger.d(TAG, "Items count: $itemCount")
         }
     }
 

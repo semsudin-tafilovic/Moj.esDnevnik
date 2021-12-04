@@ -5,10 +5,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import rs.tafilovic.mojesdnevnik.MyApp
 import rs.tafilovic.mojesdnevnik.R
@@ -16,6 +15,7 @@ import rs.tafilovic.mojesdnevnik.databinding.ActivityMainBinding
 import rs.tafilovic.mojesdnevnik.model.*
 import rs.tafilovic.mojesdnevnik.presentation.adapter.MainPageAdapter
 import rs.tafilovic.mojesdnevnik.ui.fragment.StudentsFragment
+import rs.tafilovic.mojesdnevnik.util.LocalStore
 import rs.tafilovic.mojesdnevnik.util.Logger
 import rs.tafilovic.mojesdnevnik.util.PrefsHelper
 import rs.tafilovic.mojesdnevnik.viewmodel.MainViewModel
@@ -34,6 +34,10 @@ class MainActivity : BaseActivity() {
     @Inject
     lateinit var prefsHelper: PrefsHelper
 
+
+    @Inject
+    lateinit var localStore: LocalStore
+
     private lateinit var viewPageAdapter: MainPageAdapter
 
     private lateinit var students: List<Student>
@@ -48,38 +52,37 @@ class MainActivity : BaseActivity() {
 
         viewPageAdapter = MainPageAdapter(this, null)
 
-        binding.spSchoolYears.onItemSelectedListener = onSchoolYearSelected
-        binding.spSchoolName.onItemSelectedListener = onSchoolSelected
-
         viewModel.studentsMutableLiveDate.observe(this, Observer {
             if (it == null) return@Observer
             Logger.d(TAG, "studentsMutableLiveDate.observer: $it")
             students = it
-            viewModel.setSelectedStudent(it.first())
+
+            val selectedStudent = it.find { student ->
+                student.id == localStore.getSelectedStudentId()
+            } ?: it.first()
+
+            viewModel.setSelectedStudent(selectedStudent)
         })
 
         viewModel.selectedStudentLiveData.observe(this, Observer { student ->
             if (student == null) return@Observer
 
             supportActionBar?.title = student.fullName
-
-            val schools = student.schools.entries
-                .sortedByDescending { it.key.toInt() }
-                .map { it.value }
-
-            setupSchoolsSpinner(schools)
         })
 
         viewModel.selectedSchoolLiveData.observe(this, Observer { school ->
             if (school == null) return@Observer
-            val studentSchoolYears =
-                school.schoolyears.entries
-                    .sortedByDescending { it.key.toInt() }
-                    .map { it.value }
 
-            setupSchoolYearsSpinner(studentSchoolYears)
-            viewModel.setSelectedSchoolYear(0)
+            binding.chipSchool.text = school.schoolName
         })
+
+        viewModel.selectedSchoolYear.observe(this) {
+            binding.chipSchoolYear.text = String.format(
+                "%s (%s)",
+                it.classes.values.first().section,
+                it.year
+            )
+        }
 
         viewModel.timelineParamsLiveData.observe(this, Observer {
             if (it == null) return@Observer
@@ -101,6 +104,36 @@ class MainActivity : BaseActivity() {
             }
         })
 
+
+        binding.chipSchool.setOnClickListener {
+            viewModel.schoolsLiveData.value?.let {
+                val schoolItems = it.map { it.schoolName }.toTypedArray()
+
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.select_school)
+                    .setItems(
+                        schoolItems
+                    ) { _, which ->
+                        viewModel.setSelectedSchool(it[which])
+                    }.show()
+            }
+        }
+
+        binding.chipSchoolYear.setOnClickListener {
+            viewModel.schoolYearsLiveData.value?.let { schools ->
+                val schoolYearsItems =
+                    schools.map { school -> "${school.classes.values.first().section}, ${school.year}" }
+                        .toTypedArray()
+
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(R.string.select_school_year)
+                    .setItems(
+                        schoolYearsItems
+                    ) { _, which ->
+                        viewModel.setSelectedSchoolYear(schools[which])
+                    }.show()
+            }
+        }
     }
 
     private fun setPagerAdapter(timelineParams: TimelineParams) {
@@ -145,64 +178,9 @@ class MainActivity : BaseActivity() {
         val studentsFragment = StudentsFragment.getInstance(bundle) {
             Toast.makeText(this, "Selected student: ${it.fullName}", Toast.LENGTH_SHORT).show()
             viewModel.setSelectedStudent(it)
+            localStore.setSelectedStudentId(it.id)
         }
         studentsFragment.show(supportFragmentManager, TAG)
-    }
-
-    private fun setupSchoolYearsSpinner(schoolYears: List<SchoolYear>?) {
-        if (schoolYears.isNullOrEmpty()) return
-        Logger.d(TAG, "setupSchoolYearsSpinner()")
-
-        val items =
-            schoolYears.map {
-                String.format(
-                    "%s (%s)",
-                    it.classes.values.first().section,
-                    it.year
-                )
-            }
-        val spinnerAdapter =
-            ArrayAdapter(this, R.layout.row_school_year, items)
-        binding.spSchoolYears.adapter = spinnerAdapter
-    }
-
-    private fun setupSchoolsSpinner(schools: List<School>?) {
-        if (schools.isNullOrEmpty()) return
-        Logger.d(TAG, "setupSchoolsSpinner()")
-
-        val items =
-            schools.map { String.format("%s", it.schoolName) }
-        val spinnerAdapter =
-            ArrayAdapter(this, R.layout.row_school_year, items)
-        binding.spSchoolName.adapter = spinnerAdapter
-    }
-
-    private val onSchoolSelected = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            Logger.d(TAG, "onSchoolPositionSelected: $position")
-            viewModel.setSelectedSchool(position)
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            Logger.d(TAG, "onNothingSelected")
-        }
-    }
-
-    private val onSchoolYearSelected = object : AdapterView.OnItemSelectedListener {
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            Logger.d(TAG, "onNothingSelected:")
-            // do nothing
-        }
-
-        override fun onItemSelected(
-            parent: AdapterView<*>?,
-            view: View?,
-            position: Int,
-            id: Long
-        ) {
-            Logger.d(TAG, "onSchoolYearItemSelected: $position")
-            viewModel.setSelectedSchoolYear(position)
-        }
     }
 
     override fun onConnectionChanged(connected: Boolean) {
@@ -213,5 +191,13 @@ class MainActivity : BaseActivity() {
 
     fun setProgressVisibility(visibility: Int) {
         binding.progressLoader.visibility = visibility
+    }
+
+    override fun onBackPressed() {
+        if (binding.viewPager.currentItem != 0) {
+            binding.viewPager.setCurrentItem(0, true)
+            return
+        }
+        super.onBackPressed()
     }
 }

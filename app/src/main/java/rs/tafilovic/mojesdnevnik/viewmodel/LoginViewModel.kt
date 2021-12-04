@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 import rs.tafilovic.mojesdnevnik.model.Status
 import rs.tafilovic.mojesdnevnik.model.StatusCode
 import rs.tafilovic.mojesdnevnik.model.Student
-import rs.tafilovic.mojesdnevnik.model.Students
 import rs.tafilovic.mojesdnevnik.repository.Repository
 import rs.tafilovic.mojesdnevnik.util.Logger
 import javax.inject.Inject

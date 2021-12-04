@@ -34,24 +34,22 @@ class SubjectActivityViewHolder(private val itemBinding: RowSubjectActivityBindi
     fun bind(subjectActivity: SubjectActivity) {
 
         itemBinding.tvClassName.text = subjectActivity.course
-
-        val firstPart = subjectActivity.parts["1"]?.activities
-        val secondPart = subjectActivity.parts["2"]?.activities
-
         itemBinding.tvPartOneGrades.text = null
-        firstPart?.forEach {
-            itemBinding.tvPartOneGrades.text = null
-            val spannable = getIconText(itemView.context, it.type)
-            itemBinding.tvPartOneGrades.append(spannable)
-            itemBinding.tvPartOneGrades.append(" ")
-        }
-
         itemBinding.tvPartTwoGrades.text = null
-        secondPart?.forEach {
-            val spannable = getIconText(itemView.context, it.type)
-            itemBinding.tvPartTwoGrades.append(spannable)
-            itemBinding.tvPartTwoGrades.append(" ")
-        }
+
+        subjectActivity.parts["1"]?.activities
+            ?.map { getIconText(itemView.context, it.type) }
+            ?.forEach {
+                itemBinding.tvPartOneGrades.append(it)
+                itemBinding.tvPartOneGrades.append(" ")
+            }
+
+        subjectActivity.parts["2"]?.activities
+            ?.map { getIconText(itemView.context, it.type) }
+            ?.forEach {
+                itemBinding.tvPartTwoGrades.append(it)
+                itemBinding.tvPartTwoGrades.append(" ")
+            }
 
         itemBinding.tvPartOneGrades.typeface =
             FontManager.getTypeFace(itemView.context, FontManager.FONTAWESOME)

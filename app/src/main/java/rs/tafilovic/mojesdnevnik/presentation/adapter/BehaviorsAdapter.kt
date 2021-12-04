@@ -27,7 +27,7 @@ class BehaviorsViewHolder(private val itemBinding: RowBehaviorBinding) :
 
     fun bind(behavior: Behavior) {
         itemView.apply {
-            itemBinding.tvDate.text = behavior.date;
+            itemBinding.tvDate.text = behavior.date
             itemBinding.tvName.text = behavior.name
             itemBinding.tvNote.text = behavior.note
             itemBinding.tvNote.visibility =

@@ -1,6 +1,5 @@
 package rs.tafilovic.mojesdnevnik
 
-import android.app.Application
 import androidx.multidex.MultiDexApplication
 import rs.tafilovic.mojesdnevnik.di.AppComponent
 import rs.tafilovic.mojesdnevnik.di.AppModule

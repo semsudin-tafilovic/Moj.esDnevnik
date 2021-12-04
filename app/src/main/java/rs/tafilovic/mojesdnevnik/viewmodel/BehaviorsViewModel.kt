@@ -11,16 +11,15 @@ import javax.inject.Inject
 
 class BehaviorsViewModel @Inject constructor(val repository: Repository) : ViewModel() {
 
-    val liveData = MutableLiveData<List<Behavior>>()
+    val liveData = MutableLiveData<List<Behavior>?>()
     val statusLiveData = MutableLiveData<Status<List<Behavior>>>()
 
     fun get(timelineParams: TimelineParams?) {
         repository.getBehaviors(timelineParams?.studentClassId) {
             if (it.statusValue == StatusCode.FINISHED) {
                 liveData.postValue(it.result)
-            } else {
-                statusLiveData.postValue(it)
             }
+            statusLiveData.postValue(it)
         }
     }
 }

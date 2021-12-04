@@ -7,9 +7,11 @@ import rs.tafilovic.mojesdnevnik.model.SchoolYear
 import rs.tafilovic.mojesdnevnik.model.Status
 import rs.tafilovic.mojesdnevnik.model.Student
 import rs.tafilovic.mojesdnevnik.repository.Repository
+import rs.tafilovic.mojesdnevnik.util.LocalStore
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(val repository: Repository) : ViewModel() {
+class MainViewModel @Inject constructor(val repository: Repository, val localStore: LocalStore) :
+    ViewModel() {
 
     val TAG = MainViewModel::class.java.name
 
@@ -38,28 +40,41 @@ class MainViewModel @Inject constructor(val repository: Repository) : ViewModel(
     }
 
     fun setSelectedStudent(student: Student) {
-        selectedStudentLiveData.postValue(student).apply {
+        selectedStudentLiveData.postValue(student).also {
             val schools = student.schools
                 .map { it.value }
                 .sortedByDescending { it.id?.toInt() }
-            schoolsLiveData.postValue(schools)
 
-            setSelectedSchool(0)
+            schoolsLiveData.postValue(schools).also {
+                val selectedSchool =
+                    schools.find { school -> school.id == localStore.getSelectedSchoolId() }
+                        ?: schools.first()
+
+                setSelectedSchool(selectedSchool)
+
+            }
         }
     }
 
-    fun setSelectedSchool(position: Int) {
-        val school = schoolsLiveData.value?.get(position)
-        selectedSchoolLiveData.postValue(school).apply {
-            schoolYearsLiveData.postValue(school?.schoolyears
-                ?.map { it.value }
-                ?.sortedByDescending { it.yearId })
-            setSelectedSchoolYear(0)
+    fun setSelectedSchool(school: School) {
+        selectedSchoolLiveData.postValue(school).also {
+            val schoolYears = school.schoolyears
+                .map { it.value }
+                .sortedByDescending { it.yearId }
+
+            schoolYears.let {
+                schoolYearsLiveData.postValue(it)
+                setSelectedSchoolYear(it.first())
+            }
+
+            school.id?.let {
+                localStore.setSelectedSchoolId(it)
+            }
         }
+
     }
 
-    fun setSelectedSchoolYear(position: Int) {
-        val schoolYear = schoolYearsLiveData.value?.get(position)
+    fun setSelectedSchoolYear(schoolYear: SchoolYear) {
         selectedSchoolYear.postValue(schoolYear)
     }
 
@@ -70,7 +85,8 @@ class MainViewModel @Inject constructor(val repository: Repository) : ViewModel(
 
     fun refresh() {
         val students = repository.students
-        if (students != null)
-            studentsMutableLiveDate.postValue(students)
+        students?.let {
+            studentsMutableLiveDate.postValue(it)
+        }
     }
 }

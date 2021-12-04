@@ -6,8 +6,8 @@ import java.io.File
 
 class PrefsHelper private constructor(context: Context, key: String) {
 
-    private val cachDir = context.cacheDir
-    private val responseDir = File(cachDir, "response")
+    private val cacheDir = context.cacheDir
+    private val responseDir = File(cacheDir, "response")
     private val prefs = context.getSharedPreferences(key, Context.MODE_PRIVATE)
 
     fun getInt(key: String): Int {

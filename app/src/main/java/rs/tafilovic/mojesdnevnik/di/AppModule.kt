@@ -7,6 +7,7 @@ import dagger.Provides
 import rs.tafilovic.mojesdnevnik.repository.Repository
 import rs.tafilovic.mojesdnevnik.rest.ApiClient
 import rs.tafilovic.mojesdnevnik.rest.SessionManager
+import rs.tafilovic.mojesdnevnik.util.LocalStore
 import rs.tafilovic.mojesdnevnik.util.PrefsHelper
 import java.io.File
 import javax.inject.Singleton
@@ -24,6 +25,12 @@ class AppModule(private val app: Application) {
     @Provides
     fun providePrefsHelper(): PrefsHelper {
         return PrefsHelper.getInstance(app)
+    }
+
+    @Singleton
+    @Provides
+    fun provideLocalStore(): LocalStore {
+        return LocalStore(providePrefsHelper())
     }
 
     @Singleton

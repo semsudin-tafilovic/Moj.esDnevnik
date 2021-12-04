@@ -13,7 +13,8 @@ import rs.tafilovic.mojesdnevnik.databinding.FragmentLicenceAgreementBinding
 class LicenceAgreementFragment : DialogFragment() {
 
     private var _binding: FragmentLicenceAgreementBinding? = null
-    private val binding get() = _binding!!
+    private val binding: FragmentLicenceAgreementBinding
+        get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

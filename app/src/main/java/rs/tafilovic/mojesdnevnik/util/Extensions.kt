@@ -10,6 +10,7 @@ import android.os.Build
 import android.text.Html
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.SpannedString
 import androidx.core.text.toSpanned
 import androidx.preference.PreferenceManager
 
@@ -22,6 +23,7 @@ import androidx.preference.PreferenceManager
  * Applies html formatting to String and returns trimmed Spanned
  */
 fun String?.fromHtml(): Spanned {
+    if (this.isNullOrEmpty()) return SpannedString("")
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         return Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY).trim().toSpanned()
     } else {
