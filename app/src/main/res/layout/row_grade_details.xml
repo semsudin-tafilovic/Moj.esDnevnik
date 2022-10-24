@@ -25,9 +25,6 @@
         android:layout_marginHorizontal="10dp"
         android:layout_weight="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        app:layout_constraintEnd_toStartOf="@id/tvDate"
-        app:layout_constraintStart_toEndOf="@id/tvType"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="Pjesmicu Ucimo slova Kemala Handana je djelimicno naucila" />
 
     <TextView
@@ -35,7 +32,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="22.09.2021." />
 </LinearLayout>

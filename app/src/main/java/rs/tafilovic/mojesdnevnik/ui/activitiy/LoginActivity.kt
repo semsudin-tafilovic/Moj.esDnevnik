@@ -10,6 +10,8 @@ import com.google.android.material.textfield.TextInputEditText
 import rs.tafilovic.mojesdnevnik.MyApp
 import rs.tafilovic.mojesdnevnik.R
 import rs.tafilovic.mojesdnevnik.databinding.ActivityLoginBinding
+import rs.tafilovic.mojesdnevnik.model.Cookie.Companion.PASSWORD
+import rs.tafilovic.mojesdnevnik.model.Cookie.Companion.USERNAME
 import rs.tafilovic.mojesdnevnik.model.StatusCode
 import rs.tafilovic.mojesdnevnik.ui.fragment.LicenceAgreementFragment
 import rs.tafilovic.mojesdnevnik.util.*
@@ -40,9 +42,11 @@ class LoginActivity : BaseActivity() {
         val view = binding.root
         setContentView(view)
 
+        binding.etUsername.setText(prefsHelper.getString(USERNAME))
+        binding.etPassword.setText(prefsHelper.getString(PASSWORD))
         loginViewModel.studentsLiveData.observe(this, Observer {
             Logger.d(TAG, "Students: $it")
-            if (it != null) {
+            if (it.isNotEmpty()) {
                 this.setPrefsBoolean(
                     ACCEPTED_LICENCE_AGREEMENT,
                     binding.cbAcceptAgreement.isChecked

@@ -24,7 +24,7 @@ class LoginViewModel @Inject constructor(private val repository: Repository) :
         viewModelScope.launch(Dispatchers.IO) {
             val cookies = repository.login()
             if (cookies == null) {
-                studentsLiveData.postValue(null)
+                studentsLiveData.postValue(emptyList())
                 return@launch
             }
 
@@ -53,7 +53,7 @@ class LoginViewModel @Inject constructor(private val repository: Repository) :
                 stateLiveData.postValue(Status(StatusCode.LOADING))
             }
             StatusCode.FINISHED -> {
-                studentsLiveData.postValue(it.result)
+                studentsLiveData.postValue(it.result ?: emptyList())
                 //stateLiveData.postValue(Status(StatusCode.FINISHED))
             }
             else -> {

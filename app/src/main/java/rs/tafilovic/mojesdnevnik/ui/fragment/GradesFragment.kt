@@ -14,6 +14,8 @@ class GradesFragment : BaseListFragment() {
     @Inject
     lateinit var viewModel: GradesViewModel
 
+    private var gradeDetailsFragmentDialog: GradeDetailsFragmentDialog? = null
+
     override fun inject() {
         (requireContext().applicationContext as MyApp).appComponent().inject(this)
     }
@@ -24,7 +26,7 @@ class GradesFragment : BaseListFragment() {
             if (grades.isNullOrEmpty()) {
                 showMessage(getString(R.string.no_grades))
             } else {
-                GradeDetailsFragmentDialog().also {
+                gradeDetailsFragmentDialog = GradeDetailsFragmentDialog().also {
                     it.submitItems(grades)
                     it.show(childFragmentManager, GradeDetailsFragmentDialog.TAG)
                 }
@@ -41,5 +43,10 @@ class GradesFragment : BaseListFragment() {
         }
 
         viewModel.get(timelineParams)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        gradeDetailsFragmentDialog?.let { it.dismiss() }
     }
 }

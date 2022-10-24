@@ -290,7 +290,7 @@ data class SubjectActivity(
 data class FullGrade(
     val descriptive: Boolean,
     val date: String,
-    val createTime: String,
+    val createDate: String,
     val fullGrade: String,
     val grade: Int,
     val gradeCategory: String,

@@ -2,6 +2,7 @@ package rs.tafilovic.mojesdnevnik.presentation.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import rs.tafilovic.mojesdnevnik.databinding.RowGradeDetailsBinding
@@ -39,9 +40,16 @@ class GradeDetailsViewHolder(val binding: RowGradeDetailsBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(grade: FullGrade) {
-        binding.tvFullGrade.text = grade.fullGrade
-        binding.tvDescription.text = grade.note.fromHtml()
-        binding.tvDate.text = grade.date
+        val evaluationElement=grade.evaluationElement
+        if (grade.descriptive && evaluationElement != null) {
+            binding.tvFullGrade.visibility = View.GONE
+            binding.tvDescription.text = evaluationElement.name?.fromHtml()
+        } else {
+            binding.tvFullGrade.text = grade.fullGrade
+            binding.tvDescription.text = grade.note.fromHtml()
+        }
+
+        binding.tvDate.text = grade.createDate
     }
 
     companion object {

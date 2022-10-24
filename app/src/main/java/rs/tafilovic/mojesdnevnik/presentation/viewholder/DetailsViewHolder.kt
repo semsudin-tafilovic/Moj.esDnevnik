@@ -23,7 +23,7 @@ class DetailsViewHolder(private val binding: RowActivityDetailsBinding) :
 
     fun bind(activity: Activities) {
         binding.tvIcon.append(getIconText(itemView.context, activity.type))
-        binding.tvType.append(activity.name)
+        //binding.tvType.append(activity.name)
         binding.tvDate.append(activity.date)
         binding.tvDescription.append(activity.note.fromHtml())
 

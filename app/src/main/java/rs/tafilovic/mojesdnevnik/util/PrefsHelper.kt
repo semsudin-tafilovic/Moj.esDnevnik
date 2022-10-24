@@ -46,15 +46,18 @@ class PrefsHelper private constructor(context: Context, key: String) {
         prefs.edit().putStringSet(key, value).apply()
     }
 
-    fun removeCredentials() {
+    fun removeCredentials(deleteUsernamePassword: Boolean = false) {
 
         // remove user credentials
-        prefs.edit()
-            .remove(Cookie.PASSWORD)
-            .remove(Cookie.USERNAME)
-            .remove(Cookie.COOKIE)
-            .remove(Cookie.COOKIE_EXPIRE)
-            .apply()
+        val editor = prefs.edit()
+
+        if (deleteUsernamePassword) {
+            editor.remove(Cookie.PASSWORD)
+            editor.remove(Cookie.USERNAME)
+        }
+        editor.remove(Cookie.COOKIE)
+        editor.remove(Cookie.COOKIE_EXPIRE)
+        editor.apply()
 
         // delete cached responses
         if (responseDir.exists()) {

@@ -166,7 +166,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun logout() {
-        prefsHelper.removeCredentials()
+        prefsHelper.removeCredentials(deleteUsernamePassword = true)
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }

@@ -157,7 +157,8 @@ class ActivityViewHolder(private val itemBinding: RowEventBinding) :
         itemBinding.tvGrade.setAppearance(appearance_icon)
         itemBinding.tvGrade.text = getIcon(event.cssClass)
         itemBinding.tvGrade.setTextColor(color)
-        itemBinding.tvGradeName.visibility = View.GONE
+        itemBinding.tvGradeName.text=event.activityType
+        //itemBinding.tvGradeName.visibility = View.GONE
         itemBinding.tvGrade.typeface =
             FontManager.getTypeFace(itemView.context, FontManager.FONTAWESOME)
         itemBinding.tvNote.text = event.note.fromHtml()

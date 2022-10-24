@@ -42,6 +42,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145402924891:android:1fc1140f20d0060afad47e",
+        "android_client_info": {
+          "package_name": "rs.tafilovic.mojesdnevnik.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145402924891-ifmqogjqqqshomasff1puuv00ftijqph.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ0RlUnCbOm0Q3pZfSjfKpy-oz3FfXwyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145402924891-ifmqogjqqqshomasff1puuv00ftijqph.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
