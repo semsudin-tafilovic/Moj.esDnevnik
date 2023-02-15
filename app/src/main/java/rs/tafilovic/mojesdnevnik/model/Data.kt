@@ -18,7 +18,8 @@ data class Course(var name: String, var parts: List<SchoolYearPart>)
 
 @Parcelize
 data class SchoolClass(val section: String, val studentClassId: String) : Parcelable {
-    @IgnoredOnParcel var id: String? = null
+    @IgnoredOnParcel
+    var id: String? = null
 }
 
 @Parcelize
@@ -31,7 +32,8 @@ data class SchoolYear(
 @Parcelize
 data class School(val schoolName: String, val schoolyears: HashMap<String, SchoolYear>) :
     Parcelable {
-    @IgnoredOnParcel var id: String? = null
+    @IgnoredOnParcel
+    var id: String? = null
 }
 
 @Parcelize
@@ -149,30 +151,31 @@ data class EvaluationElementCourse(
 
         if (!evaluationElement.name.isNullOrEmpty())
             sb.append(evaluationElement.name).append("\n")
+        else {
+            if (!evaluationElement.name_sq_AL.isNullOrEmpty())
+                sb.append(evaluationElement.name_sq_AL).append("\n")
 
-        if (!evaluationElement.name_sq_AL.isNullOrEmpty())
-            sb.append(evaluationElement.name_sq_AL).append("\n")
+            if (!evaluationElement.name_bs_BA.isNullOrEmpty())
+                sb.append(evaluationElement.name_bs_BA).append("\n")
 
-        if (!evaluationElement.name_bs_BA.isNullOrEmpty())
-            sb.append(evaluationElement.name_bs_BA).append("\n")
+            if (!evaluationElement.name_bg_BG.isNullOrEmpty())
+                sb.append(evaluationElement.name_bg_BG).append("\n")
 
-        if (!evaluationElement.name_bg_BG.isNullOrEmpty())
-            sb.append(evaluationElement.name_bg_BG).append("\n")
+            if (!evaluationElement.name_hu_HU.isNullOrEmpty())
+                sb.append(evaluationElement.name_hu_HU).append("\n")
 
-        if (!evaluationElement.name_hu_HU.isNullOrEmpty())
-            sb.append(evaluationElement.name_hu_HU).append("\n")
+            if (!evaluationElement.name_ro_RO.isNullOrEmpty())
+                sb.append(evaluationElement.name_ro_RO).append("\n")
 
-        if (!evaluationElement.name_ro_RO.isNullOrEmpty())
-            sb.append(evaluationElement.name_ro_RO).append("\n")
+            if (!evaluationElement.name_ru_UA.isNullOrEmpty())
+                sb.append(evaluationElement.name_ru_UA).append("\n")
 
-        if (!evaluationElement.name_ru_UA.isNullOrEmpty())
-            sb.append(evaluationElement.name_ru_UA).append("\n")
+            if (!evaluationElement.name_sk_SK.isNullOrEmpty())
+                sb.append(evaluationElement.name_sk_SK).append("\n")
 
-        if (!evaluationElement.name_sk_SK.isNullOrEmpty())
-            sb.append(evaluationElement.name_sk_SK).append("\n")
-
-        if (!evaluationElement.name_hr_HR.isNullOrEmpty())
-            sb.append(evaluationElement.name_hr_HR).append("\n")
+            if (!evaluationElement.name_hr_HR.isNullOrEmpty())
+                sb.append(evaluationElement.name_hr_HR).append("\n")
+        }
 
         return sb.toString()
     }
@@ -278,7 +281,7 @@ data class SubjectActivity(
                 return oldItem.course == newItem.course &&
                         oldItem.classCourseId == newItem.classCourseId &&
                         oldItem.sequence == newItem.sequence &&
-                        oldItem.createTime==newItem.createTime
+                        oldItem.createTime == newItem.createTime
             }
 
         }

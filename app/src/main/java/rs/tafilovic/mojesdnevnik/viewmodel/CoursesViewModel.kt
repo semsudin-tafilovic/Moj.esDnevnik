@@ -17,7 +17,9 @@ class CoursesViewModel @Inject constructor(val repository: Repository) : ViewMod
     fun get(timelineParams: TimelineParams?) {
         repository.getCourses(timelineParams?.studentClassId) {
             if (it.statusValue == StatusCode.FINISHED) {
-                liveData.postValue(it.result)
+                it.result?.let {data->
+                    liveData.postValue(data)
+                }
             } else {
                 statusLiveData.postValue(it)
             }

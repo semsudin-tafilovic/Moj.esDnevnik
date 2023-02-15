@@ -159,8 +159,7 @@ class ActivityViewHolder(private val itemBinding: RowEventBinding) :
         itemBinding.tvGrade.setTextColor(color)
         itemBinding.tvGradeName.text=event.activityType
         //itemBinding.tvGradeName.visibility = View.GONE
-        itemBinding.tvGrade.typeface =
-            FontManager.getTypeFace(itemView.context, FontManager.FONTAWESOME)
+        itemBinding.tvGrade.typeface = FontManager.getTypeFace(itemView.context)
         itemBinding.tvNote.text = event.note.fromHtml()
         itemBinding.viewColorIndicator.setBackgroundColor(color)
     }

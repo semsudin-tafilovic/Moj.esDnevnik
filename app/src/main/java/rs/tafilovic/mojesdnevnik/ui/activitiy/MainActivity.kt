@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
+import rs.tafilovic.mojesdnevnik.BuildConfig
 import rs.tafilovic.mojesdnevnik.MyApp
 import rs.tafilovic.mojesdnevnik.R
 import rs.tafilovic.mojesdnevnik.databinding.ActivityMainBinding
@@ -161,8 +162,20 @@ class MainActivity : BaseActivity() {
             R.id.mi_logout -> {
                 logout()
             }
+            R.id.mi_app_version -> {
+                showInfoDialog()
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showInfoDialog() {
+        val info = "${getString(R.string.unofficial_app)} ${getString(R.string.app_name)}\n\n${getString(R.string.version)}:${BuildConfig.VERSION_NAME}"
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.app_info)
+            .setMessage(info)
+            .setPositiveButton(android.R.string.ok,null)
+            .show()
     }
 
     private fun logout() {

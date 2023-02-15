@@ -21,4 +21,7 @@
     <string name="select_school_year">Izaberite razred (školsku godinu)</string>
     <string name="no_activity_for_selected_class">Nema aktivnosti za izabrani predmet</string>
     <string name="no_grades">Ne postoje unete ocene za ovaj predmet.</string>
+    <string name="app_info">O aplikaciji</string>
+    <string name="version">Verzija</string>
+    <string name="unofficial_app">Nezvanična android aplikacija</string>
 </resources>

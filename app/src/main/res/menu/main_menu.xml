@@ -10,6 +10,13 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/mi_app_version"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/app_info"
+        app:iconTint="@android:color/white"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/mi_logout"
         android:icon="@drawable/ic_exit"
         android:title="@string/logout"

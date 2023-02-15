@@ -33,7 +33,10 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
     private val token_text = "_token"
     private val user_agent_text = "User-Agent"
     private val userAgent =
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
+    private val accept_key = "Accept"
+    private val accept_text =
+        "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
 
     private lateinit var cookieManager: CookieManager
 
@@ -47,13 +50,11 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
             val conn: HttpURLConnection = url.openConnection() as HttpURLConnection
 
             conn.apply {
-                addRequestProperty(
-                    user_agent_text,
-                    userAgent
-                )
-                addRequestProperty("Accept", "*/*")
-                doInput = true
                 requestMethod = GET
+                addRequestProperty(user_agent_text, userAgent)
+                addRequestProperty(accept_key, accept_text)
+                addRequestProperty("Content-Type", "application/x-www-form-urlencoded")
+                addRequestProperty("Cache-Control", "max-age=0")
             }
 
             val stream = BufferedInputStream(conn.inputStream)
@@ -136,8 +137,6 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
         prefsHelper.setString(Cookie.COOKIE, session.getCookiesFormatted())
         prefsHelper.setLong(Cookie.COOKIE_EXPIRE, session.cookies[0].expirationTime)
 
-        FirebaseCrashlytics.getInstance().setUserId(username)
-
         return session.getCookiesFormatted()
     }
 
@@ -171,7 +170,7 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
 
     private fun selectToken(html: String): String {
         val document = Jsoup.parse(html)
-        return document.select("body > div.main-wrap > div > div.login-wrap-right > div.tab.active > form > input[type=hidden]")
+        return document.select("body > div.main-wrap > div > div.login-wrap-right > div.tab > form > input[type=hidden]")
             .first()?.attr("value") ?: ""
     }
 

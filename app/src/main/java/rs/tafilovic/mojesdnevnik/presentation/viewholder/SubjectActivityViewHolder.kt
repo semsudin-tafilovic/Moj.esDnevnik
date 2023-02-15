@@ -51,11 +51,9 @@ class SubjectActivityViewHolder(private val itemBinding: RowSubjectActivityBindi
                 itemBinding.tvPartTwoGrades.append(" ")
             }
 
-        itemBinding.tvPartOneGrades.typeface =
-            FontManager.getTypeFace(itemView.context, FontManager.FONTAWESOME)
+        itemBinding.tvPartOneGrades.typeface = FontManager.getTypeFace(itemView.context)
 
-        itemBinding.tvPartTwoGrades.typeface =
-            FontManager.getTypeFace(itemView.context, FontManager.FONTAWESOME)
+        itemBinding.tvPartTwoGrades.typeface = FontManager.getTypeFace(itemView.context)
 
         itemBinding.cardFinalOne.visibility = View.GONE
         itemBinding.cardFinalTwo.visibility = View.GONE

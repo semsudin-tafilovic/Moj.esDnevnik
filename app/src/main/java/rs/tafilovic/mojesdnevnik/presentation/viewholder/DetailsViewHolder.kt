@@ -27,11 +27,9 @@ class DetailsViewHolder(private val binding: RowActivityDetailsBinding) :
         binding.tvDate.append(activity.date)
         binding.tvDescription.append(activity.note.fromHtml())
 
-        binding.tvIcon.typeface =
-            FontManager.getTypeFace(itemView.context, FontManager.FONTAWESOME)
+        binding.tvIcon.typeface = FontManager.getTypeFace(itemView.context)
 
-        binding.tvIcon.typeface =
-            FontManager.getTypeFace(itemView.context, FontManager.FONTAWESOME)
+        binding.tvIcon.typeface = FontManager.getTypeFace(itemView.context)
     }
 
     private fun getIcon(type: Int): String {
