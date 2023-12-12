@@ -1,6 +1,10 @@
 package rs.tafilovic.mojesdnevnik.viewmodel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import rs.tafilovic.mojesdnevnik.model.Event
@@ -31,12 +35,11 @@ class TimelineViewModel @Inject constructor(val repository: Repository) : ViewMo
     init {
         dataSourceFactory =
             TimelineDataSourceFactory(viewModelScope, repository, timelineParams)
-        eventLiveData = Transformations.switchMap(timelineParams) { createLiveData() }
+        eventLiveData = timelineParams.switchMap { createLiveData() }
     }
 
     fun getState(): LiveData<Status<Event>> {
-        return Transformations.switchMap(
-            dataSourceFactory.dataSourceLiveData,
+        return dataSourceFactory.dataSourceLiveData.switchMap(
             TimelineDataSource::status
         )
     }

@@ -8,17 +8,30 @@ import kotlinx.parcelize.Parcelize
 import java.util.*
 
 data class SchoolYearPart(
+    @SerializedName("value")
     val value: Int,
+    @SerializedName("desc")
     val desc: String,
+    @SerializedName("grades")
     val grades: List<Int>,
+    @SerializedName("finalGrade")
     var finalGrade: Float
 )
 
-data class Course(var name: String, var parts: List<SchoolYearPart>)
+data class Course(
+    @SerializedName("name") var name: String,
+    @SerializedName("parts") var parts: List<SchoolYearPart>
+)
 
 @Parcelize
-data class SchoolClass(val section: String, val studentClassId: String) : Parcelable {
+data class SchoolClass(
+    @SerializedName("section")
+    val section: String,
+    @SerializedName("studentClassId")
+    val studentClassId: String
+) : Parcelable {
     @IgnoredOnParcel
+    @SerializedName("id")
     var id: String? = null
 }
 
@@ -30,47 +43,31 @@ data class SchoolYear(
 ) : Parcelable
 
 @Parcelize
-data class School(val schoolName: String, val schoolyears: HashMap<String, SchoolYear>) :
+data class School(
+    @SerializedName("schoolName")
+    val schoolName: String,
+    @SerializedName("schoolyears")
+    val schoolyears: HashMap<String, SchoolYear>
+) :
     Parcelable {
     @IgnoredOnParcel
+    @SerializedName("id")
     var id: String? = null
 }
 
 @Parcelize
 data class Student(
+    @SerializedName("id")
     val id: Long,
+    @SerializedName("fullName")
     val fullName: String,
+    @SerializedName("jmbg")
     val jmbg: String,
+    @SerializedName("gender")
     val gender: String,
+    @SerializedName("schools")
     val schools: HashMap<String, School>
 ) : Parcelable {
-
-/*
-    fun getSchoolId(): String {
-        return schools.keys.first()
-    }
-
-    fun getSchool(): School {
-        return schools.values.first()
-    }
-
-    fun getSchoolYear(): SchoolYear {
-        val schoolYears = getSchool().schoolyears.values
-        return schoolYears.maxBy { it.yearId }!!
-    }
-*/
-
-/*
-    fun getClassId(): String? {
-        val schoolClasses = getSchoolYear().classes
-        return schoolClasses.keys.first()
-    }
-
-    fun getStudentClassId(): Long {
-        return getSchoolYear().classes.values.first().studentClassId.toLong()
-    }
-*/
-
     companion object {
         val DIF_UTIL = object : DiffUtil.ItemCallback<Student>() {
             override fun areItemsTheSame(oldItem: Student, newItem: Student): Boolean {
@@ -87,20 +84,38 @@ data class Student(
 
 @Parcelize
 data class TimelineParams(
+    @SerializedName("studentId")
     var studentId: String? = null,
+    @SerializedName("schoolId")
     var schoolId: String? = null,
+    @SerializedName("classId")
     var classId: String? = null,
+    @SerializedName("studentClassId")
     var studentClassId: String? = null
 ) :
     Parcelable
 
 @Parcelize
-data class StudentSchoolYear(val student: Student?, val schoolYear: SchoolYear?) : Parcelable
+data class StudentSchoolYear(
+    @SerializedName("student")
+    val student: Student?,
+    @SerializedName("schoolYear")
+    val schoolYear: SchoolYear?
+) : Parcelable
 
-data class Students(var data: List<Student>)
+data class Students(
+    @SerializedName("data") var data: List<Student>
+)
 
 
-data class Cookie(val name: String, val value: String, val expirationTime: Long) {
+data class Cookie(
+    @SerializedName("name")
+    val name: String,
+    @SerializedName("value")
+    val value: String,
+    @SerializedName("expirationTime")
+    val expirationTime: Long
+) {
 
     fun getCookieFormatted(): String {
         return "$name=$value;"
@@ -114,9 +129,12 @@ data class Cookie(val name: String, val value: String, val expirationTime: Long)
     }
 }
 
-data class Grades(val courses: List<Course>)
+data class Grades(@SerializedName("courses") val courses: List<Course>)
 
-data class Session(val html: String, val cookies: List<Cookie>) {
+data class Session(
+    @SerializedName("html") val html: String,
+    @SerializedName("cookies") val cookies: List<Cookie>
+) {
 
     fun getCookiesFormatted(): String {
         val sb = StringBuffer()
@@ -128,20 +146,38 @@ data class Session(val html: String, val cookies: List<Cookie>) {
 }
 
 data class Grade(
+    @SerializedName("id")
     val id: Int,
-    @SerializedName("grade_type_id") val gradeTypeId: Int,
+    @SerializedName("grade_type_id")
+    val gradeTypeId: Int,
+    @SerializedName("name")
     val name: String,
+    @SerializedName("value")
     val value: Int,
+    @SerializedName("sequence")
     val sequence: Int
 )
 
-data class Timeline(val data: HashMap<String, List<Event>>, val meta: HashMap<String, Long>)
+data class Timeline(
+    @SerializedName("data")
+    val data: HashMap<String, List<Event>>,
+    @SerializedName("meta")
+    val meta: HashMap<String, Long>
+)
 
-data class Engagement(val id: Int, val name: String?)
+data class Engagement(
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("name")
+    val name: String?
+)
 
 data class EvaluationElementCourse(
+    @SerializedName("id")
     val id: Long,
+    @SerializedName("sequence")
     val sequence: Int,
+    @SerializedName("evaluationElement")
     val evaluationElement: EvaluationElement?
 ) {
     fun getEvaluationElement(): String? {
@@ -182,43 +218,79 @@ data class EvaluationElementCourse(
 }
 
 data class EvaluationElement(
+    @SerializedName("id")
     val id: Long?,
+    @SerializedName("sequence")
     val sequence: Int?,
+    @SerializedName("name")
     val name: String?,
+    @SerializedName("name_sq_AL")
     val name_sq_AL: String?,
+    @SerializedName("name_bs_BA")
     val name_bs_BA: String?,
+    @SerializedName("name_bg_BG")
     val name_bg_BG: String?,
+    @SerializedName("name_hu_HU")
     val name_hu_HU: String?,
+    @SerializedName("name_ro_RO")
     val name_ro_RO: String?,
+    @SerializedName("name_ru_UA")
     val name_ru_UA: String?,
+    @SerializedName("name_sk_SK")
     val name_sk_SK: String?,
+    @SerializedName("name_hr_HR")
     val name_hr_HR: String?
 )
 
+
 data class Event(
+    @SerializedName("type")
     val type: String,
+    @SerializedName("date")
     val date: String,
+    @SerializedName("createTime")
     val createTime: String,
+    @SerializedName("fullGrade")
     val fullGrade: String,
+    @SerializedName("grade")
     val grade: Grade,
+    @SerializedName("gradeCategory")
     val gradeCategory: String,
+    @SerializedName("note")
     val note: String,
+    @SerializedName("course")
     val course: String,
+    @SerializedName("classCourseId")
     val classCourseId: Long,
+    @SerializedName("schoolClass")
     val schoolClass: String,
+    @SerializedName("school")
     val school: String,
+    @SerializedName("iopNote")
     val iopNote: String,
+    @SerializedName("activityType")
     val activityType: String,
+    @SerializedName("cssClass")
     val cssClass: String,
+    @SerializedName("schoolHour")
     val schoolHour: Int,
+    @SerializedName("workHourNote")
     val workHourNote: String?,
+    @SerializedName("teacherNote")
     val teacherNote: String?,
+    @SerializedName("classMasterNote")
     val classMasterNote: String?,
+    @SerializedName("absentType")
     val absentType: String?,
+    @SerializedName("status")
     val status: String?,
+    @SerializedName("statusId")
     val statusId: Int,
+    @SerializedName("engagement")
     val engagement: Engagement?,
+    @SerializedName("schoolyearPart")
     val schoolyearPart: String?,
+    @SerializedName("evaluationElementCourse")
     val evaluationElementCourse: EvaluationElementCourse?
 ) {
     companion object {
@@ -247,22 +319,34 @@ data class Event(
 }
 
 data class Activities(
+    @SerializedName("date")
     val date: String,
+    @SerializedName("createTime")
     val createTime: String,
+    @SerializedName("type")
     val type: Int,
+    @SerializedName("note")
     val note: String,
+    @SerializedName("name")
     val name: String,
+    @SerializedName("faClass")
     val faClass: String
 )
 
-data class ActivitiesPart(val activities: List<Activities>)
+data class ActivitiesPart(@SerializedName("activities") val activities: List<Activities>)
 
 data class SubjectActivity(
+    @SerializedName("course")
     val course: String,
+    @SerializedName("classCourseId")
     val classCourseId: Long,
+    @SerializedName("sequence")
     val sequence: Int,
+    @SerializedName("createTime")
     val createTime: Date?,
+    @SerializedName("date")
     val date: Date?,
+    @SerializedName("parts")
     val parts: HashMap<String, ActivitiesPart>
 ) {
     companion object {
@@ -291,35 +375,56 @@ data class SubjectActivity(
 /*************** BEGIN GRADES API ENDPOINT POJO ***************/
 
 data class FullGrade(
+    @SerializedName("descriptive")
     val descriptive: Boolean,
+    @SerializedName("date")
     val date: String,
+    @SerializedName("createDate")
     val createDate: String,
+    @SerializedName("fullGrade")
     val fullGrade: String,
+    @SerializedName("grade")
     val grade: Int,
+    @SerializedName("gradeCategory")
     val gradeCategory: String,
+    @SerializedName("note")
     val note: String?,
+    @SerializedName("schoolyearPartId")
     val schoolyearPartId: String?,
+    @SerializedName("evaluationElement")
     val evaluationElement: EvaluationElement?
 )
 
 data class FinalGrade(
+    @SerializedName("name")
     val name: String,
+    @SerializedName("value")
     val value: Int,
-    @SerializedName("schoolyear_part_id") val schoolyearPartId: Int,
+    @SerializedName("schoolyear_part_id")
+    val schoolyearPartId: Int,
+    @SerializedName("engagement")
     val engagement: String?
 )
 
 data class FullGradesCollection(
+    @SerializedName("grades")
     val grades: List<FullGrade>,
+    @SerializedName("final")
     val final: FinalGrade?,
+    @SerializedName("average")
     val average: Float
 )
 
 data class FullGrades(
+    @SerializedName("course")
     val course: String,
+    @SerializedName("classCourseId")
     val classCourseId: Long,
+    @SerializedName("classCourseGradeTypeId")
     val classCourseGradeTypeId: Int,
+    @SerializedName("sequence")
     val sequence: Int,
+    @SerializedName("parts")
     val parts: HashMap<String, FullGradesCollection>
 ) {
     companion object {
@@ -343,9 +448,13 @@ data class FullGrades(
 /*************** BEGIN ABSENTS API ENDPOINT POJO ***************/
 
 data class AbsentClass(
+    @SerializedName("classCourseId")
     val classCourseId: Long,
+    @SerializedName("name")
     val name: String,
+    @SerializedName("sequence")
     val sequence: String,
+    @SerializedName("absentStatuses")
     val absentStatuses: HashMap<String, AbsentStatus>
 ) {
 
@@ -358,21 +467,35 @@ data class AbsentClass(
     }
 }
 
-data class AbsentStatus(val statusId: Int, val name: String, val absents: List<AbsentClassDetails>)
+data class AbsentStatus(
+    @SerializedName("statusId") val statusId: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("absents") val absents: List<AbsentClassDetails>
+)
 
 data class AbsentClassDetails(
+    @SerializedName("id")
     val id: Long,
+    @SerializedName("workHourId")
     val workHourId: Long,
+    @SerializedName("teacherNote")
     val teacherNote: String?,
+    @SerializedName("statusName")
     val statusName: String?,
+    @SerializedName("workHourNote")
     val workHourNote: String?,
+    @SerializedName("workdayDate")
     val workdayDate: String
 )
 
 data class Absent(
+    @SerializedName("classCourseName")
     val classCourseName: String,
+    @SerializedName("absentStatus")
     val absentStatus: String,
+    @SerializedName("absentStatusId")
     val absentStatusId: Int,
+    @SerializedName("absentDetails")
     val absentDetails: List<AbsentClassDetails>
 ) {
 
@@ -397,10 +520,15 @@ data class Absent(
 /*************** BEGIN BEHAVIOR API ENDPOINT POJO ***************/
 
 data class Behavior(
+    @SerializedName("id")
     val id: Long,
+    @SerializedName("name")
     val name: String,
+    @SerializedName("date")
     val date: String,
+    @SerializedName("schoolyearPartId")
     val schoolyearPartId: Int,
+    @SerializedName("note")
     val note: String?
 ) {
     companion object {
@@ -421,13 +549,21 @@ data class Behavior(
 
 /*************** BEGIN COURSES API ENDPOINT POJO ***************/
 
-data class Teacher(val name: String, val consultationInfo: String?)
+data class Teacher(
+    @SerializedName("name") val name: String,
+    @SerializedName("consultationInfo") val consultationInfo: String?
+)
 
 data class MainCourse(
+    @SerializedName("id")
     val id: Long,
+    @SerializedName("sequence")
     val sequence: Int,
+    @SerializedName("name")
     val name: String,
+    @SerializedName("teachers")
     val teachers: List<Teacher>,
+    @SerializedName("subCourses")
     val subCourses: List<SubCourse>
 ) {
     companion object {
@@ -447,10 +583,15 @@ data class MainCourse(
 }
 
 data class SubCourse(
+    @SerializedName("id")
     val id: Long,
+    @SerializedName("sequence")
     val sequence: Int,
+    @SerializedName("parentClassCourseId")
     val parentClassCourseId: Long,
+    @SerializedName("name")
     val name: String,
+    @SerializedName("teachers")
     val teachers: List<Teacher>
 )
 
@@ -460,7 +601,12 @@ data class SubCourse(
 
 enum class StatusCode { ERROR, LOADING, FINISHED }
 
-class Status<T>(val statusValue: StatusCode, val result: T?, val message: String?) {
+class Status<T>(
+    val statusValue: StatusCode,
+    val result: T?,
+    val message: String?,
+    val exception: Exception? = null
+) {
 
     constructor(statusValue: StatusCode, message: String?) : this(
         statusValue,
@@ -468,7 +614,12 @@ class Status<T>(val statusValue: StatusCode, val result: T?, val message: String
         message
     )
 
-    constructor(statusValue: StatusCode) : this(statusValue, null)
+    constructor(statusValue: StatusCode, exception: Exception? = null) : this(
+        statusValue = statusValue,
+        result = null,
+        message = null,
+        exception = exception
+    )
 
     val statusDesc: String = when (statusValue) {
         StatusCode.ERROR -> "Error"

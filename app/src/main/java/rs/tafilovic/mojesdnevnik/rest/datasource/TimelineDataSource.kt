@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import rs.tafilovic.mojesdnevnik.model.Event
 import rs.tafilovic.mojesdnevnik.model.Status
 import rs.tafilovic.mojesdnevnik.model.StatusCode
@@ -35,22 +37,23 @@ class TimelineDataSource(
 
         if (studentId == null || schoolId == null || classId == null) return
 
-        scope.launch {
+        scope.launch(Dispatchers.IO) {
             Logger.d(TAG, "loadInitial()")
             status.postValue(Status(StatusCode.LOADING))
-            repository.getTimeline(
+            val timeline = repository.getTimeline(
                 studentId,
                 schoolId,
                 classId,
                 params.requestedLoadSize,
                 1
-            ) {
-                val result = it.result?.data?.values?.flatten() ?: listOf()
+            )
+
+            withContext(Dispatchers.Main) {
+                val result = timeline.result?.data?.values?.flatten() ?: listOf()
                 Logger.d(TAG, "loadInitial() - result: $result")
                 callback.onResult(result.sortedByDescending { i -> i.date }, null, 2)
-                status.postValue(Status(it.statusValue))
+                status.postValue(Status(timeline.statusValue))
             }
-
         }
     }
 
@@ -63,20 +66,21 @@ class TimelineDataSource(
 
         if (studentId == null || schoolId == null || classId == null) return
 
-        scope.launch {
+        scope.launch(Dispatchers.IO) {
             status.postValue(Status(StatusCode.LOADING))
             Logger.d(TAG, "loadAfter()")
-            repository.getTimeline(
+            val timeline = repository.getTimeline(
                 studentId,
                 schoolId,
                 classId,
                 params.requestedLoadSize,
                 params.key
-            ) {
-                val result = it.result?.data?.values?.flatten() ?: listOf()
+            )
+            withContext(Dispatchers.Main) {
+                val result = timeline.result?.data?.values?.flatten() ?: listOf()
                 Logger.d(TAG, "loadAfter() - result: $result")
                 callback.onResult(result.sortedByDescending { i -> i.date }, params.key + 1)
-                status.postValue(Status(it.statusValue))
+                status.postValue(Status(timeline.statusValue))
             }
         }
     }

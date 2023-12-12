@@ -2,7 +2,14 @@ package rs.tafilovic.mojesdnevnik.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import rs.tafilovic.mojesdnevnik.model.*
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import rs.tafilovic.mojesdnevnik.model.Absent
+import rs.tafilovic.mojesdnevnik.model.AbsentClass
+import rs.tafilovic.mojesdnevnik.model.Status
+import rs.tafilovic.mojesdnevnik.model.StatusCode
+import rs.tafilovic.mojesdnevnik.model.TimelineParams
 import rs.tafilovic.mojesdnevnik.repository.Repository
 import javax.inject.Inject
 
@@ -12,7 +19,8 @@ class AbsentsViewModel @Inject constructor(val repository: Repository) : ViewMod
     val statusLiveData = MutableLiveData<Status<List<AbsentClass>>>()
 
     fun get(timelineParams: TimelineParams?) {
-        repository.getAbsents(timelineParams?.studentClassId) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val it = repository.getAbsents(timelineParams?.studentClassId)
             if (it.statusValue == StatusCode.FINISHED) {
                 liveData.postValue(it.result)
             }

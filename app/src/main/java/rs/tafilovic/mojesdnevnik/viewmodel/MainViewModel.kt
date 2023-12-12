@@ -37,6 +37,8 @@ class MainViewModel @Inject constructor(val repository: Repository, val localSto
             selectedSchoolLiveData,
             selectedSchoolYear
         )
+
+        refresh()
     }
 
     fun setSelectedStudent(student: Student) {

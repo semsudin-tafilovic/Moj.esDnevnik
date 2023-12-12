@@ -2,6 +2,9 @@ package rs.tafilovic.mojesdnevnik.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import rs.tafilovic.mojesdnevnik.model.MainCourse
 import rs.tafilovic.mojesdnevnik.model.Status
 import rs.tafilovic.mojesdnevnik.model.StatusCode
@@ -15,9 +18,10 @@ class CoursesViewModel @Inject constructor(val repository: Repository) : ViewMod
     val statusLiveData = MutableLiveData<Status<List<MainCourse>>>()
 
     fun get(timelineParams: TimelineParams?) {
-        repository.getCourses(timelineParams?.studentClassId) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val it = repository.getCourses(timelineParams?.studentClassId)
             if (it.statusValue == StatusCode.FINISHED) {
-                it.result?.let {data->
+                it.result?.let { data ->
                     liveData.postValue(data)
                 }
             } else {

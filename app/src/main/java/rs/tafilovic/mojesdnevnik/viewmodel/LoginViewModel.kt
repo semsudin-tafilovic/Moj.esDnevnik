@@ -10,6 +10,7 @@ import rs.tafilovic.mojesdnevnik.model.StatusCode
 import rs.tafilovic.mojesdnevnik.model.Student
 import rs.tafilovic.mojesdnevnik.repository.Repository
 import rs.tafilovic.mojesdnevnik.util.Logger
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(private val repository: Repository) :
@@ -22,13 +23,17 @@ class LoginViewModel @Inject constructor(private val repository: Repository) :
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val cookies = repository.login()
-            if (cookies == null) {
-                studentsLiveData.postValue(emptyList())
-                return@launch
+            try {
+                val cookies = repository.login()
+                if (cookies == null) {
+                    studentsLiveData.postValue(emptyList())
+                    return@launch
+                }
+                val students = repository.getStudents(cookies)
+                onStudentsResponse(students)
+            } catch (e: Exception) {
+                onStudentsResponse(Status(StatusCode.ERROR, exception = e))
             }
-
-            repository.getStudents(cookies) { onStudentsResponse(it) }
         }
     }
 
@@ -40,9 +45,12 @@ class LoginViewModel @Inject constructor(private val repository: Repository) :
         stateLiveData.postValue(Status(StatusCode.LOADING))
         viewModelScope.launch(Dispatchers.IO) {
             Logger.d(TAG, "login(username: $username, password: $password)")
-            val cookie = repository.login(username, password, rememberMe) ?: ""
-            repository.getStudents(cookie) {
-                onStudentsResponse(it)
+            try {
+                val cookie = repository.login(username, password, rememberMe)
+                val students = repository.getStudents(cookie)
+                onStudentsResponse(students)
+            } catch (e: Exception) {
+                onStudentsResponse(Status(StatusCode.ERROR, exception = e))
             }
         }
     }
@@ -52,12 +60,23 @@ class LoginViewModel @Inject constructor(private val repository: Repository) :
             StatusCode.LOADING -> {
                 stateLiveData.postValue(Status(StatusCode.LOADING))
             }
+
             StatusCode.FINISHED -> {
                 studentsLiveData.postValue(it.result ?: emptyList())
                 //stateLiveData.postValue(Status(StatusCode.FINISHED))
             }
+
             else -> {
-                stateLiveData.postValue(Status(StatusCode.ERROR, "Uneti podaci nisu tačni."))
+                if (it.exception is UnknownHostException) {
+                    stateLiveData.postValue(
+                        Status(
+                            StatusCode.ERROR,
+                            "Nema internet konekcije ili je slaba."
+                        )
+                    )
+                } else {
+                    stateLiveData.postValue(Status(StatusCode.ERROR, "Uneti podaci nisu tačni."))
+                }
             }
         }
     }

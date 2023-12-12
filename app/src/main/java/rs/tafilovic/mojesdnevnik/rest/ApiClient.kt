@@ -3,7 +3,6 @@ package rs.tafilovic.mojesdnevnik.rest
 import com.google.gson.GsonBuilder
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -19,31 +18,31 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 interface ApiService {
     @GET("students")
-    fun getStudents(): Call<Students>
+    suspend fun getStudents(): retrofit2.Response<Students>
 
     @GET("timeline/{studentId}")
-    fun getTimeline(
+    suspend fun getTimeline(
         @Path("studentId") studentId: String,
         @Query("take") take: Int,
         @Query("page") page: Int,
         @Query("school") schoolId: String,
         @Query("class") classId: String
-    ): Call<Timeline>
+    ): retrofit2.Response<Timeline>
 
     @GET("activities/{studentClassId}")
-    fun getActivities(@Path("studentClassId") studentClassId: String): Call<List<SubjectActivity>>
+    suspend fun getActivities(@Path("studentClassId") studentClassId: String): retrofit2.Response<List<SubjectActivity>>
 
     @GET("grades/{studentClassId}")
-    fun getGrades(@Path("studentClassId") studentClassId: String): Call<List<FullGrades>>
+    suspend fun getGrades(@Path("studentClassId") studentClassId: String): retrofit2.Response<List<FullGrades>>
 
     @GET("absents/{studentClassId}")
-    fun getAbsents(@Path("studentClassId") studentClassId: String): Call<HashMap<String, AbsentClass>>
+    suspend fun getAbsents(@Path("studentClassId") studentClassId: String): retrofit2.Response<HashMap<String, AbsentClass>>
 
     @GET("behavior/{studentClassId}")
-    fun getBehaviors(@Path("studentClassId") studentClassId: String): Call<List<Behavior>>
+    suspend fun getBehaviors(@Path("studentClassId") studentClassId: String): retrofit2.Response<List<Behavior>>
 
     @GET("courses/{studentClassId}")
-    fun getCourses(@Path("studentClassId") studentClassId: String): Call<List<MainCourse>>
+    suspend fun getCourses(@Path("studentClassId") studentClassId: String): retrofit2.Response<List<MainCourse>>
 }
 
 private val HEADER_PRAGMA = "Pragma"
@@ -135,12 +134,11 @@ class ApiClient(cacheDir: File) {
         .cache(apiCache)
         .addInterceptor(cookieInterceptor)
         .addInterceptor(httpLoggingInterceptor)
-        //.addNetworkInterceptor(networkInterceptor)
+        .addNetworkInterceptor(networkInterceptor)
         .addInterceptor(offlineInterceptor)
         .build()
 
     private val gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create()
-
 
     private val retrofit: Retrofit = Retrofit.Builder()
         .client(okHttpClient)

@@ -2,6 +2,9 @@ package rs.tafilovic.mojesdnevnik.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import rs.tafilovic.mojesdnevnik.model.Status
 import rs.tafilovic.mojesdnevnik.model.StatusCode
 import rs.tafilovic.mojesdnevnik.model.SubjectActivity
@@ -15,13 +18,14 @@ class ActivitiesViewModel @Inject constructor(val repository: Repository) : View
     val statusLiveData = MutableLiveData<Status<List<SubjectActivity>>>()
 
     fun get(timelineParams: TimelineParams?) {
-        repository.getActivities(timelineParams?.studentClassId) {
-            if (it.statusValue == StatusCode.FINISHED) {
-                it.result?.let {data->
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getActivities(timelineParams?.studentClassId)
+            if (response.statusValue == StatusCode.FINISHED) {
+                response.result?.let { data ->
                     liveData.postValue(data)
                 }
             } else {
-                statusLiveData.postValue(it)
+                statusLiveData.postValue(response)
             }
         }
     }

@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Moj esDnevnik</string>
     <string name="select_student">Izaberi učenika</string>
     <string name="unknown_error">Nepoznata greška</string>
     <string name="username_label">Korisničko ime</string>

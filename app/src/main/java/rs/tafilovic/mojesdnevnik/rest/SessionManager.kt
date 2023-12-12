@@ -9,7 +9,11 @@ import rs.tafilovic.mojesdnevnik.util.PrefsHelper
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStream
-import java.net.*
+import java.net.CookieHandler
+import java.net.CookieManager
+import java.net.CookiePolicy
+import java.net.HttpURLConnection
+import java.net.URL
 
 /**
  * Test accounts:
@@ -40,7 +44,7 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
 
     private lateinit var cookieManager: CookieManager
 
-    private fun get(): String? {
+    private fun get(): String {
         try {
             cookieManager = CookieManager()
             cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL)
@@ -61,8 +65,8 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
             return readStream(stream)
         } catch (e: Exception) {
             Logger.e(TAG, e.message)
+            throw e
         }
-        return null
     }
 
     private fun post(params: HashMap<String, String>): Session {
@@ -124,7 +128,7 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
         if (username.isNullOrEmpty() || password.isNullOrEmpty())
             return null
 
-        val getHtml = get() ?: return null
+        val getHtml = get()
         val token = selectToken(getHtml)
 
         val params = HashMap<String, String>()
@@ -140,12 +144,12 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
         return session.getCookiesFormatted()
     }
 
-    suspend fun getCookies(username: String, password: String, rememberMe: Boolean): String? {
+    suspend fun getCookies(username: String, password: String, rememberMe: Boolean): String {
         Logger.d(
             TAG,
             "getCookies(username: $username, password: $password, rememberMe:$rememberMe)"
         )
-        val getHtml = get() ?: return null
+        val getHtml = get()
         val token = selectToken(getHtml)
         Logger.i(TAG, "Token: $token")
 
@@ -183,59 +187,59 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
         return output
     }
 
-/*
-    private fun loginWithJsoup() {
-        Thread(Runnable {
+    /*
+        private fun loginWithJsoup() {
+            Thread(Runnable {
 
-            val formData = HashMap<String, String>()
-            val cookies = HashMap<String, String>()
-            val userAgent =
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36";
+                val formData = HashMap<String, String>()
+                val cookies = HashMap<String, String>()
+                val userAgent =
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36";
 
-            val loginForm =
-                Jsoup.connect(login_url).method(Connection.Method.GET).userAgent(userAgent)
+                val loginForm =
+                    Jsoup.connect(login_url).method(Connection.Method.GET).userAgent(userAgent)
+                        .execute()
+                val loginDoc = loginForm.parse()
+
+                cookies.putAll(loginForm.cookies())
+
+                val authToken =
+                    loginDoc.select("body > div.main-wrap > div > div.login-wrap-right > div.tab.active > form > input[type=hidden]")
+                        .first().attr("value")
+
+                // Log.i(TAG, "Token expiration: " + Date(authToken.expirationTime))
+                Log.i(TAG, "Auth token: $authToken")
+                formData["commit"] = "Sign in"
+                formData["utf8"] = "e2 9c 93"
+                formData[username_text] = username
+                formData[password_text] = password
+                formData["_token"] = authToken
+
+                val homePage = Jsoup.connect(login_url)
+                    .cookies(cookies)
+                    .data(formData)
+                    .method(Connection.Method.POST)
+                    .userAgent(userAgent)
                     .execute()
-            val loginDoc = loginForm.parse()
 
-            cookies.putAll(loginForm.cookies())
+                val homePageDoc = homePage.parse()
 
-            val authToken =
-                loginDoc.select("body > div.main-wrap > div > div.login-wrap-right > div.tab.active > form > input[type=hidden]")
-                    .first().attr("value")
+                val sb = StringBuffer()
+                val cookies2 = homePage.cookies()
 
-            // Log.i(TAG, "Token expiration: " + Date(authToken.expirationTime))
-            Log.i(TAG, "Auth token: $authToken")
-            formData["commit"] = "Sign in"
-            formData["utf8"] = "e2 9c 93"
-            formData[username_text] = username
-            formData[password_text] = password
-            formData["_token"] = authToken
-
-            val homePage = Jsoup.connect(login_url)
-                .cookies(cookies)
-                .data(formData)
-                .method(Connection.Method.POST)
-                .userAgent(userAgent)
-                .execute()
-
-            val homePageDoc = homePage.parse()
-
-            val sb = StringBuffer()
-            val cookies2 = homePage.cookies()
-
-           val response = ApiClient.getService(cookies2).getStudents().execute()
+               val response = ApiClient.getService(cookies2).getStudents().execute()
 
 
-            runOnUiThread {
-                if (response.isSuccessful) {
-                    val studentType = object : TypeToken<List<Student>>() {}.type
-                    val jsonArray = JSONObject(response.body()!!).get("data")
-                    val student = Gson().fromJson<List<Student>>(jsonArray.toString(), studentType)
-                    tvText.setText(student.toString())
-                } else {
-                    tvText.setText(response.message())
+                runOnUiThread {
+                    if (response.isSuccessful) {
+                        val studentType = object : TypeToken<List<Student>>() {}.type
+                        val jsonArray = JSONObject(response.body()!!).get("data")
+                        val student = Gson().fromJson<List<Student>>(jsonArray.toString(), studentType)
+                        tvText.setText(student.toString())
+                    } else {
+                        tvText.setText(response.message())
+                    }
                 }
-            }
-        }).start()
-    }*/
+            }).start()
+        }*/
 }
