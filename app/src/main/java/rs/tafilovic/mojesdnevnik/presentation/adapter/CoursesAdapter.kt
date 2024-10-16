@@ -59,8 +59,9 @@ class CoursesViewHolder(private val itemBinding: RowCourseTeachersBinding) :
             }
 
             if (!t.consultationInfo.isNullOrEmpty()) {
+                val consultInfo="Konsultacije: ${t.consultationInfo}"
                 val tvConsultationInfo = TextView(layout.context).apply {
-                    text = "Konsultacije: ${t.consultationInfo}"
+                    text = consultInfo
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
                         setTextAppearance(context, R.style.TextAppearance_AppCompat_Caption)
                     else

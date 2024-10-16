@@ -1,6 +1,7 @@
 package rs.tafilovic.mojesdnevnik.ui.activitiy
 
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import rs.tafilovic.mojesdnevnik.rest.ApiClient
 import rs.tafilovic.mojesdnevnik.util.Logger
@@ -15,6 +16,17 @@ abstract class BaseActivity : AppCompatActivity() {
     fun showToast(msg: String?) {
         if (msg != null)
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    fun showDialogMessage(msg: String, title: String? = "Moj.esDnevnik") {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle(title)
+            .setCancelable(true)
+            .setMessage(msg)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+        dialog.show()
     }
 
     override fun onResume() {

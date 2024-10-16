@@ -37,12 +37,17 @@ class StudentsViewHolder(private val itemBinding: RowStudentSelectBinding) :
 
             val school: School? = if (schools.isNotEmpty()) schools[0] else null
 
-            val schoolClass = school?.schoolyears?.entries?.sortedByDescending { it.key.toInt() }
-                ?.map { it.value.classes.entries.sortedByDescending { it.key.toInt() } }
+            val schoolClass =
+                school?.schoolyears
+                    ?.sortedByDescending { schoolYear -> schoolYear.yearId }
+                    ?.map {
+                        it.classes
+                            .sortedByDescending { schoolClass -> schoolClass.yearId }
+                    }
 
             val section = schoolClass?.get(0)
-                ?.sortedByDescending { it.key.toInt() }
-                ?.map { it.value.section }
+                ?.sortedByDescending { it.yearId }
+                ?.map { it.section }
 
             itemBinding.tvName.apply {
                 text = student.fullName

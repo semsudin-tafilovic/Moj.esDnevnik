@@ -1,7 +1,12 @@
 package rs.tafilovic.mojesdnevnik.rest
 
 import com.google.gson.GsonBuilder
-import okhttp3.*
+import okhttp3.Cache
+import okhttp3.CacheControl
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Response
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -9,7 +14,14 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import rs.tafilovic.mojesdnevnik.model.*
+import rs.tafilovic.mojesdnevnik.model.AbsentClass
+import rs.tafilovic.mojesdnevnik.model.Behavior
+import rs.tafilovic.mojesdnevnik.model.FullGrades
+import rs.tafilovic.mojesdnevnik.model.MainCourse
+import rs.tafilovic.mojesdnevnik.model.Student
+import rs.tafilovic.mojesdnevnik.model.Students
+import rs.tafilovic.mojesdnevnik.model.SubjectActivity
+import rs.tafilovic.mojesdnevnik.model.Timeline
 import rs.tafilovic.mojesdnevnik.util.Logger
 import java.io.File
 import java.util.concurrent.TimeUnit

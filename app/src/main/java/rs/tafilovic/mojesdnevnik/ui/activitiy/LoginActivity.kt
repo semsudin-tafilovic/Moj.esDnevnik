@@ -14,7 +14,11 @@ import rs.tafilovic.mojesdnevnik.model.Cookie.Companion.PASSWORD
 import rs.tafilovic.mojesdnevnik.model.Cookie.Companion.USERNAME
 import rs.tafilovic.mojesdnevnik.model.StatusCode
 import rs.tafilovic.mojesdnevnik.ui.fragment.LicenceAgreementFragment
-import rs.tafilovic.mojesdnevnik.util.*
+import rs.tafilovic.mojesdnevnik.util.KeyboardEventListener
+import rs.tafilovic.mojesdnevnik.util.Logger
+import rs.tafilovic.mojesdnevnik.util.PrefsHelper
+import rs.tafilovic.mojesdnevnik.util.getPrefsBoolean
+import rs.tafilovic.mojesdnevnik.util.setPrefsBoolean
 import rs.tafilovic.mojesdnevnik.viewmodel.LoginViewModel
 import javax.inject.Inject
 
@@ -59,7 +63,7 @@ class LoginActivity : BaseActivity() {
             }
         })
 
-        loginViewModel.stateLiveData.observe(this, Observer {
+        loginViewModel.stateLiveData.observe(this) {
             if (it.statusValue == StatusCode.LOADING) {
                 binding.loginProgress.visibility = View.VISIBLE
                 binding.cardLogin.visibility = View.GONE
@@ -67,8 +71,10 @@ class LoginActivity : BaseActivity() {
                 binding.loginProgress.visibility = View.GONE
                 binding.cardLogin.visibility = View.VISIBLE
             }
-            showToast(it.message)
-        })
+            it.message?.let { msg ->
+                showDialogMessage(msg)
+            }
+        }
 
         binding.cbAcceptAgreement.setOnCheckedChangeListener { _, isChecked ->
             binding.btnLogin.isEnabled = isChecked

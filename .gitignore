@@ -16,3 +16,6 @@
 /app/release/output-metadata.json
 *.apk
 *.aab
+.idea/*
+/.idea/*
+app/release

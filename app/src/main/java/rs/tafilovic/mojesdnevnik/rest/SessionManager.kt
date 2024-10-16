@@ -37,7 +37,7 @@ class SessionManager(private val prefsHelper: PrefsHelper) {
     private val token_text = "_token"
     private val user_agent_text = "User-Agent"
     private val userAgent =
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36"
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0"
     private val accept_key = "Accept"
     private val accept_text =
         "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"

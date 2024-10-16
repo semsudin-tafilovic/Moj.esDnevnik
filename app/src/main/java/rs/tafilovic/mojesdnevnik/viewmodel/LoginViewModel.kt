@@ -3,6 +3,7 @@ package rs.tafilovic.mojesdnevnik.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonParseException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import rs.tafilovic.mojesdnevnik.model.Status
@@ -67,7 +68,14 @@ class LoginViewModel @Inject constructor(private val repository: Repository) :
             }
 
             else -> {
-                if (it.exception is UnknownHostException) {
+                if (it.exception is JsonParseException) {
+                    stateLiveData.postValue(
+                        Status(
+                            StatusCode.ERROR,
+                            "Greška u formatu JSON podatka: " + it.exception.message
+                        )
+                    )
+                } else if (it.exception is UnknownHostException) {
                     stateLiveData.postValue(
                         Status(
                             StatusCode.ERROR,

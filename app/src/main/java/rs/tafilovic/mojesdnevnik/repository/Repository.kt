@@ -1,5 +1,8 @@
 package rs.tafilovic.mojesdnevnik.repository
 
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -13,6 +16,7 @@ import rs.tafilovic.mojesdnevnik.model.SchoolYear
 import rs.tafilovic.mojesdnevnik.model.Status
 import rs.tafilovic.mojesdnevnik.model.StatusCode
 import rs.tafilovic.mojesdnevnik.model.Student
+import rs.tafilovic.mojesdnevnik.model.Students
 import rs.tafilovic.mojesdnevnik.model.SubjectActivity
 import rs.tafilovic.mojesdnevnik.model.Timeline
 import rs.tafilovic.mojesdnevnik.rest.ApiClient
@@ -58,11 +62,11 @@ class Repository(
         return if (response.isSuccessful) {
             students = response.body()?.data
             students?.forEach { student ->
-                student.schools.forEach { entrySchool: Map.Entry<String, School> ->
+                student.schools.forEach { entrySchool ->
                     entrySchool.value.id = entrySchool.key
-                    entrySchool.value.schoolyears.forEach { entrySchoolYear: Map.Entry<String, SchoolYear> ->
-                        entrySchoolYear.value.classes.forEach { entrySchoolClass: Map.Entry<String, SchoolClass> ->
-                            entrySchoolClass.value.id = entrySchoolClass.key
+                    entrySchool.value.schoolyears.forEach { entrySchoolYear ->
+                        entrySchoolYear.classes.forEach { entrySchoolClass ->
+                            entrySchoolClass.id = entrySchoolClass.schoolClassId.toString()
                         }
                     }
                 }

@@ -80,7 +80,7 @@ class MainActivity : BaseActivity() {
         viewModel.selectedSchoolYear.observe(this) {
             binding.chipSchoolYear.text = String.format(
                 "%s (%s)",
-                it.classes.values.first().section,
+                it.classes.first().section,
                 it.year
             )
         }
@@ -123,7 +123,7 @@ class MainActivity : BaseActivity() {
         binding.chipSchoolYear.setOnClickListener {
             viewModel.schoolYearsLiveData.value?.let { schools ->
                 val schoolYearsItems =
-                    schools.map { school -> "${school.classes.values.first().section}, ${school.year}" }
+                    schools.map { school -> "${school.classes.first().section}, ${school.year}" }
                         .toTypedArray()
 
                 MaterialAlertDialogBuilder(this)

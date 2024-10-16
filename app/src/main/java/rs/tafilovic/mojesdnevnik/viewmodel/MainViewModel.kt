@@ -61,7 +61,6 @@ class MainViewModel @Inject constructor(val repository: Repository, val localSto
     fun setSelectedSchool(school: School) {
         selectedSchoolLiveData.postValue(school).also {
             val schoolYears = school.schoolyears
-                .map { it.value }
                 .sortedByDescending { it.yearId }
 
             schoolYears.let {

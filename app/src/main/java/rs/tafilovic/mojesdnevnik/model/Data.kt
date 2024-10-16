@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import java.util.*
+import java.util.Date
 
 data class SchoolYearPart(
     @SerializedName("value")
@@ -27,9 +27,23 @@ data class Course(
 data class SchoolClass(
     @SerializedName("section")
     val section: String,
+
+    @SerializedName("schoolClassId")
+    val schoolClassId: Long,
+
     @SerializedName("studentClassId")
-    val studentClassId: String
-) : Parcelable {
+    val studentClassId: Long,
+
+    @SerializedName("sort")
+    val sort: String,
+
+    @SerializedName("yearId")
+    val yearId: Int,
+
+    @SerializedName("year")
+    val year: String,
+
+    ) : Parcelable {
     @IgnoredOnParcel
     @SerializedName("id")
     var id: String? = null
@@ -38,8 +52,8 @@ data class SchoolClass(
 @Parcelize
 data class SchoolYear(
     @SerializedName("year") val year: String,
-    @SerializedName("year_id") val yearId: String,
-    @SerializedName("classes") val classes: HashMap<String, SchoolClass>
+    @SerializedName("year_id") val yearId: Int,
+    @SerializedName("classes") val classes: List<SchoolClass>
 ) : Parcelable
 
 @Parcelize
@@ -47,7 +61,7 @@ data class School(
     @SerializedName("schoolName")
     val schoolName: String,
     @SerializedName("schoolyears")
-    val schoolyears: HashMap<String, SchoolYear>
+    val schoolyears: List<SchoolYear>
 ) :
     Parcelable {
     @IgnoredOnParcel
